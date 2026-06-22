@@ -1,0 +1,271 @@
+<!-- Sitemap: L1: 首頁 (Homepage) -->
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>帝樂香港有限公司 | Delights Hong Kong</title>
+    <script>tailwind.config = { theme: { extend: { colors: { 'indigo': '#1d3557', 'terracotta': '#b86a48', 'rice-paper': '#edeae5' }, fontFamily: { 'serif': ['Baskervville', 'Georgia', 'serif'], 'sans': ['Helvetica Now Text', 'Helvetica', 'Arial', 'sans-serif'] } } } }</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baskervville:ital@0;1&family=Helvetica+Now+Text:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* 根據視覺方向定義自訂字體和顏色 */
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'indigo': '#1d3557',
+                        'terracotta': '#b86a48',
+                        'rice-paper': '#edeae5',
+                    },
+                    fontFamily: {
+                        'serif': ['Baskervville', 'Georgia', 'serif'], /* For headings */
+                        'sans': ['"Helvetica Now Text"', 'Helvetica', 'Arial', 'sans-serif'], /* For body */
+                    }
+                }
+            }
+        }
+    </style>
+</head>
+<body class="bg-rice-paper font-sans text-indigo">
+
+    <!-- Header -->
+    <header class="bg-rice-paper/80 backdrop-blur-sm sticky top-0 z-50 border-b border-indigo/10">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="font-serif text-2xl font-bold tracking-wider">DELIGHTS HK</a>
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="#" class="hover:text-terracotta transition-colors">關於帝樂</a>
+                <a href="#" class="hover:text-terracotta transition-colors">品牌系列</a>
+                <a href="#" class="hover:text-terracotta transition-colors">成為合作夥伴</a>
+                <a href="#" class="hover:text-terracotta transition-colors">最新動態</a>
+                <a href="#" class="bg-indigo text-rice-paper px-4 py-2 hover:bg-terracotta transition-colors">聯絡我們</a>
+            </div>
+            <!-- Mobile Menu Button -->
+            <div class="md:hidden">
+                <button class="text-indigo">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- 1. Hero Section -->
+        <section class="relative h-screen flex items-center justify-center text-center">
+            <div class="absolute inset-0 bg-indigo opacity-60"></div>
+            <!-- 背景圖片/影片: 應為全螢幕影片或高清圖片 -->
+            <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://via.placeholder.com/1920x1080/1d3557/edeae5?text=Hero+Visual');">
+                <!-- 攝影風格: 戲劇性光影 (Dramatic Chiaroscuro) 的成品菜式慢動作影片或高清圖, 或廚師專注研發的場景 -->
+            </div>
+            <div class="relative z-10 px-6 text-rice-paper">
+                <h1 class="font-serif text-4xl md:text-6xl lg:text-7xl font-bold tracking-wide">米其林星級匠心，源自頂級食材</h1>
+                <p class="mt-4 max-w-2xl mx-auto text-lg md:text-xl">Delights Hong Kong 融合廚藝大師的非凡技藝與溫氏佳味的純粹本質，為您呈獻無與倫比的餐飲體驗。</p>
+            </div>
+        </section>
+
+        <!-- 2. 核心價值主張 -->
+        <section class="py-16 lg:py-24">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+                    <div class="flex flex-col items-center">
+                        <!-- Placeholder for Icon -->
+                        <div class="w-16 h-16 bg-indigo/10 flex items-center justify-center mb-4">
+                            <span class="font-serif text-2xl text-terracotta">I</span>
+                        </div>
+                        <h2 class="font-serif text-2xl mb-2">米其林廚師主理</h2>
+                        <p class="text-indigo/80">我們的產品由星級廚師團隊親自研發，確保每一口都蘊含著匠心與巧思。</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <!-- Placeholder for Icon -->
+                        <div class="w-16 h-16 bg-indigo/10 flex items-center justify-center mb-4">
+                            <span class="font-serif text-2xl text-terracotta">II</span>
+                        </div>
+                        <h2 class="font-serif text-2xl mb-2">溫氏頂級食材</h2>
+                        <p class="text-indigo/80">嚴選來自溫氏食品集團的優質食材，從源頭保證產品的卓越品質。</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <!-- Placeholder for Icon -->
+                        <div class="w-16 h-16 bg-indigo/10 flex items-center justify-center mb-4">
+                            <span class="font-serif text-2xl text-terracotta">III</span>
+                        </div>
+                        <h2 class="font-serif text-2xl mb-2">品質溯源保證</h2>
+                        <p class="text-indigo/80">完整的供應鏈監控，確保從農場到餐桌的每一步都安全、透明、可靠。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 3. 品牌系列速覽 -->
+        <section class="py-16 lg:py-24 bg-indigo text-rice-paper">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="font-serif text-3xl md:text-4xl">匠心孵化，品味非凡</h2>
+                    <p class="mt-2 text-rice-paper/80">探索我們精心打造的每一個品牌故事。</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Brand Card 1 -->
+                    <a href="#" class="group block overflow-hidden">
+                        <div class="h-80 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" style="background-image: url('https://via.placeholder.com/800x600/b86a48/edeae5?text=品牌+A');">
+                            <!-- 攝影風格: 符合該IP品牌調性的主視覺, 突顯其獨特定位 -->
+                        </div>
+                        <div class="mt-4">
+                            <h3 class="font-serif text-2xl">品牌A：都市慢煮</h3>
+                            <p class="text-rice-paper/70 mt-1">為繁忙都市人設計的五星級慢煮料理包。</p>
+                        </div>
+                    </a>
+                    <!-- Brand Card 2 -->
+                    <a href="#" class="group block overflow-hidden">
+                         <div class="h-80 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" style="background-image: url('https://via.placeholder.com/800x600/b86a48/edeae5?text=品牌+B');">
+                            <!-- 攝影風格: 符合該IP品牌調性的主視覺, 突顯其獨特定位 -->
+                        </div>
+                        <div class="mt-4">
+                            <h3 class="font-serif text-2xl">品牌B：醬心獨運</h3>
+                            <p class="text-rice-paper/70 mt-1">米其林廚師秘製醬料，點亮您的家庭餐桌。</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. B2B合作夥伴入口 -->
+        <section class="py-16 lg:py-24">
+            <div class="container mx-auto px-6">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div class="order-2 lg:order-1">
+                        <h2 class="font-serif text-3xl md:text-4xl">為您的業務注入米其林級品質</h2>
+                        <p class="mt-4 text-lg text-indigo/80">無論您是餐廳、酒店還是高端零售商，帝樂香港都能為您提供獨一無二的產品解決方案，提升您的品牌價值與客戶滿意度。</p>
+                        <a href="#" class="inline-block mt-8 bg-terracotta text-rice-paper font-bold py-3 px-8 hover:bg-terracotta/90 transition-colors">了解合作方案</a>
+                    </div>
+                    <div class="order-1 lg:order-2 h-96 bg-cover bg-center" style="background-image: url('https://via.placeholder.com/800x600/1d3557/edeae5?text=B2B+Visual');">
+                        <!-- 攝影風格: 紀實故事感, 專業廚房場景或高端零售陳列場景 -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. 主廚故事 -->
+        <section class="py-16 lg:py-24 bg-indigo/5">
+             <div class="container mx-auto px-6">
+                <div class="grid lg:grid-cols-5 gap-12 items-center">
+                    <div class="lg:col-span-2">
+                        <div class="aspect-w-1 aspect-h-1 bg-cover bg-center" style="background-image: url('https://via.placeholder.com/600x600/1d3557/edeae5?text=主廚肖像');">
+                            <!-- 攝影風格: 專業匠人風, 廚師自信專注的半身肖像, 背景為專業廚房 (淺景深) -->
+                        </div>
+                    </div>
+                    <div class="lg:col-span-3">
+                        <blockquote class="border-l-4 border-terracotta pl-6">
+                            <p class="font-serif text-2xl md:text-3xl leading-relaxed">「真正的美食，始於對食材最純粹的尊重。我們的使命，就是發掘並昇華這份本質之美。」</p>
+                            <footer class="mt-4">
+                                <span class="font-bold text-lg">Chef Antoine Dubois</span>
+                                <span class="block text-indigo/70">帝樂香港 首席研發總監</span>
+                            </footer>
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 6. 最新動態 -->
+        <section class="py-16 lg:py-24">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="font-serif text-3xl md:text-4xl">最新動態</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- News Item 1 -->
+                    <div class="border border-indigo/10">
+                        <div class="h-56 bg-cover bg-center" style="background-image: url('https://via.placeholder.com/600x400/edeae5/1d3557?text=News+1');"></div>
+                        <div class="p-6">
+                            <p class="text-sm text-indigo/60 mb-2">2023年10月26日 • 公司新聞</p>
+                            <h3 class="font-serif text-xl font-bold mb-3">帝樂香港正式成立，致力重塑本地高端食品市場</h3>
+                            <a href="#" class="font-bold text-terracotta hover:underline">閱讀更多 &rarr;</a>
+                        </div>
+                    </div>
+                    <!-- News Item 2 -->
+                    <div class="border border-indigo/10">
+                        <div class="h-56 bg-cover bg-center" style="background-image: url('https://via.placeholder.com/600x400/edeae5/1d3557?text=News+2');"></div>
+                        <div class="p-6">
+                            <p class="text-sm text-indigo/60 mb-2">2023年11月15日 • 媒體報導</p>
+                            <h3 class="font-serif text-xl font-bold mb-3">《美食家》專訪：米其林廚藝與頂級食材的火花</h3>
+                             <a href="#" class="font-bold text-terracotta hover:underline">閱讀更多 &rarr;</a>
+                        </div>
+                    </div>
+                    <!-- News Item 3 -->
+                    <div class="border border-indigo/10">
+                        <div class="h-56 bg-cover bg-center" style="background-image: url('https://via.placeholder.com/600x400/edeae5/1d3557?text=News+3');"></div>
+                        <div class="p-6">
+                            <p class="text-sm text-indigo/60 mb-2">2023年12月01日 • 活動快訊</p>
+                            <h3 class="font-serif text-xl font-bold mb-3">帝樂香港將參與本年度國際食品展</h3>
+                             <a href="#" class="font-bold text-terracotta hover:underline">閱讀更多 &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-indigo text-rice-paper/80 py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div>
+                    <h4 class="font-serif text-lg text-rice-paper mb-4">關於帝樂</h4>
+                    <ul>
+                        <li class="mb-2"><a href="#" class="hover:text-terracotta">我們的理念</a></li>
+                        <li class="mb-2"><a href="#" class="hover:text-terracotta">品質與溯源</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-serif text-lg text-rice-paper mb-4">品牌系列</h4>
+                     <ul>
+                        <li class="mb-2"><a href="#" class="hover:text-terracotta">IP 孵化品牌</a></li>
+                        <li class="mb-2"><a href="#" class="hover:text-terracotta">代理分銷品牌</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-serif text-lg text-rice-paper mb-4">合作夥伴</h4>
+                     <ul>
+                        <li class="mb-2"><a href="#" class="hover:text-terracotta">餐飲及零售</a></li>
+                        <li class="mb-2"><a href="#" class="hover:text-terracotta">分銷及代理</a></li>
+                    </ul>
+                </div>
+                 <div>
+                    <h4 class="font-serif text-lg text-rice-paper mb-4">保持聯繫</h4>
+                     <ul>
+                        <li class="mb-2"><a href="#" class="hover:text-terracotta">最新動態</a></li>
+                        <li class="mb-2"><a href="#" class="hover:text-terracotta">聯絡我們</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-rice-paper/20 text-center text-sm">
+                <p>&copy; 2023 Delights Hong Kong Limited. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+        const btn = document.querySelector('header button');
+        const nav = document.querySelector('header nav');
+        let menu = null;
+        btn.addEventListener('click', () => {
+            if (menu) { menu.remove(); menu = null; return; }
+            menu = document.createElement('div');
+            menu.className = 'absolute top-full left-0 w-full bg-rice-paper border-t border-indigo/10 flex flex-col px-6 py-4 space-y-4 md:hidden';
+            menu.innerHTML = `
+                <a href="index.html" class="hover:text-terracotta">首頁</a>
+                <a href="about.html" class="hover:text-terracotta">關於帝樂</a>
+                <a href="#" class="hover:text-terracotta">品牌系列</a>
+                <a href="#" class="hover:text-terracotta">成為合作夥伴</a>
+                <a href="#" class="hover:text-terracotta">最新動態</a>
+                <a href="#" class="bg-indigo text-rice-paper px-4 py-2 hover:bg-terracotta text-center">聯絡我們</a>`;
+            nav.style.position = 'relative';
+            nav.appendChild(menu);
+        });
+    </script>
+</body>
+</html>
