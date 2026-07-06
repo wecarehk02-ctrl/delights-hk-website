@@ -52,10 +52,13 @@
     </div>
 
     <!-- App scripts (order matters) -->
+    <!-- Supabase client (optional cloud sync; app runs local-only if unavailable) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="js/vendor/qrcode.js"></script>
     <script src="js/store.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/biz.js"></script>
+    <script src="js/adapters/supabase-adapter.js"></script>
     <script src="js/modules/dashboard.js"></script>
     <script src="js/modules/products.js"></script>
     <script src="js/modules/customers.js"></script>

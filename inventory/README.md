@@ -34,11 +34,34 @@ inventory/
     app.js               分頁路由 + QR 深連結（#lot=…）
 ```
 
-## 換去雲端
+## 雲端同步（Supabase）
 
-`store.js` 內所有讀寫都經 `Store.adapter`。要接後端，只需實作同樣介面
-（`readAll` / `writeAll` / `ready`）指向你嘅 API / Firebase / Supabase，
-再 `Store.adapter = YourAdapter`，其他模組毋須改動。
+已內建 Supabase 接口，**離線優先 + 背景同步**：UI 照舊即時讀本地快取（斷網都用得），
+寫入背景推去 Supabase，其他裝置經 realtime 即時更新。
+
+### 一次性設定
+1. 建立 Supabase project（免費方案已足夠）。
+2. Supabase → **SQL Editor**，貼上並執行 repo 內嘅 [`supabase/schema.sql`](../supabase/schema.sql)
+   （建表 `inventory_store`、RLS、realtime）。
+3. Supabase → **Authentication → Users** 新增員工帳號（email + 密碼）；
+   並喺 **Providers → Email** 關閉 "Allow new users to sign up"，只准你加嘅人登入。
+4. 倉存系統 → **設定 → ☁ 雲端同步**，填 **Project URL** 同 **anon public key**
+   （Supabase → Project Settings → API 搵到），按「啟用並連接」。
+5. 重新載入 → 出現登入畫面 → 用步驟 3 嘅帳號登入。搞掂。
+
+### 登入 / 安全
+- 預設 **Email/密碼登入**：RLS 只准已登入用戶讀寫，受保護標籤資料喺伺服器端真正受控。
+- 設定內有「改用 anon 免登入」選項（對應 schema 方案 B），**只建議喺唔含敏感資料時用**，
+  因為 anon key 會喺前端出現，等同資料公開。
+
+### 運作細節
+- 儲存模型：每個 collection 一行 `jsonb` blob（對應本地快取），支援動態欄位、last-write-wins。
+- 斷網時改動會排隊（dirty queue），回線 / 登入後自動補推。
+- 想改成逐列（row-level）並發，可將 `inventory_store` 拆成每 document 一行；adapter 已隔離，改動集中。
+
+### 純本地 / 其他後端
+唔想用雲端就唔好啟用，系統維持純本地。`store.js` 所有讀寫都經 `Store.adapter`，
+要接其他後端（Firebase 等）只需仿照 `js/adapters/supabase-adapter.js` 實作同樣介面即可。
 
 ## 資料備份
 

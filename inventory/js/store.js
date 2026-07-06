@@ -176,6 +176,10 @@
   Store.DEFAULT_SCHEMA = DEFAULT_SCHEMA;
   Store.DEFAULT_SETTINGS = DEFAULT_SETTINGS;
 
+  // Exposed so a cloud adapter can wrap the local store as an offline cache.
+  Store.LocalAdapter = LocalAdapter;
+  Store.NS = NS;
+
   // ---- Seed helpers --------------------------------------------------------
   Store.ensureSeed = function () {
     if (this.adapter.readAll('productSchema') == null) {

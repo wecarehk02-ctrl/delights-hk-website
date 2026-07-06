@@ -51,20 +51,31 @@
     else App.go('dashboard');
   }
 
-  function boot() {
-    // QR self-test (fails loudly if the vendored generator is broken)
-    try { root.DELIGHTS_QR.selfTest(); } catch (e) { console.error(e); }
-    Store.ensureSeed();
+  function afterData() {
     App.renderNav();
     handleHash();
     window.addEventListener('hashchange', function () {
       var h = (location.hash || '').replace('#', '');
       if (h.indexOf('lot=') === 0) handleHash();
     });
-    // mobile nav toggle
+    // re-render current view when cloud sync brings in changes
+    Store.subscribe(function (c) { if (c === '*') { try { root.Modules[App.current].render(document.getElementById('inv-main')); } catch (e) {} } });
     var toggle = document.getElementById('inv-nav-toggle');
     var side = document.getElementById('inv-side');
     if (toggle && side) toggle.addEventListener('click', function () { side.classList.toggle('-translate-x-full'); });
+  }
+
+  function boot() {
+    // QR self-test (fails loudly if the vendored generator is broken)
+    try { root.DELIGHTS_QR.selfTest(); } catch (e) { console.error(e); }
+    App.renderNav();
+    // Cloud (Supabase) mode if configured & enabled; otherwise pure local.
+    if (root.Cloud && root.Cloud.isEnabled()) {
+      root.Cloud.start(function () { afterData(); });
+    } else {
+      Store.ensureSeed();
+      afterData();
+    }
   }
 
   root.App = App;
