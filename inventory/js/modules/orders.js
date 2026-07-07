@@ -22,6 +22,7 @@
       { label: '操作', class: 'text-right whitespace-nowrap', render: function (o) {
         return el('div', { class: 'flex gap-2 justify-end' }, [
           el('button', { class: 'text-terracotta hover:underline text-xs', text: '編輯', onclick: function () { editOrder(o, container); } }),
+          el('button', { class: 'text-indigo hover:underline text-xs', text: '複製', onclick: function () { editOrder(o, container, true); } }),
           el('button', { class: 'text-indigo hover:underline text-xs', text: '送貨單', onclick: function () { root.Modules.delivery.print(o.id); } }),
           el('button', { class: 'text-red-600 hover:underline text-xs', text: '刪除', onclick: function () {
             UI.confirmModal('刪除單號 ' + o.orderNo + '？', function () { Store.remove('orders', o.id); UI.toast('已刪除', 'ok'); render(container); }, { danger: true });
@@ -44,7 +45,8 @@
     return (o.lines || []).reduce(function (s, l) { return s + Number(l.qty || 0) * Number(l.unitPrice || 0); }, 0);
   }
 
-  function editOrder(o, container) {
+  function editOrder(o, container, isClone) {
+    var editing = o && !isClone;            // true = update existing; clone = prefill but insert
     var products = Store.all('products');
     var customers = Store.all('customers');
     var currency = Store.settings().currency;
@@ -57,11 +59,11 @@
           value: o ? o.customerId : '' }),
         UI.field({ key: 'status', label: '狀態', type: 'select',
           options: [{ value: 'pending', label: '待處理' }, { value: 'shipped', label: '已出貨' }, { value: 'invoiced', label: '已開單' }],
-          value: o ? o.status : 'pending' })
+          value: editing ? o.status : 'pending' })
       ]),
       UI.grid(2, [
-        UI.field({ key: 'orderDate', label: '下單日期', type: 'date', required: true, value: o ? o.orderDate : new Date().toISOString().slice(0, 10) }),
-        UI.field({ key: 'deliveryDate', label: '送貨日期', type: 'date', required: true, value: o ? o.deliveryDate : new Date().toISOString().slice(0, 10) })
+        UI.field({ key: 'orderDate', label: '下單日期', type: 'date', required: true, value: editing ? o.orderDate : new Date().toISOString().slice(0, 10) }),
+        UI.field({ key: 'deliveryDate', label: '送貨日期', type: 'date', required: true, value: editing ? o.deliveryDate : new Date().toISOString().slice(0, 10) })
       ]),
       UI.field({ key: 'deliveryAddress', label: '送貨地址', type: 'textarea', rows: 2, value: o ? o.deliveryAddress : '' })
     ]);
@@ -127,7 +129,7 @@
     drawLines();
 
     UI.modal({
-      title: o ? '編輯訂單 ' + o.orderNo : '新下單', width: 'max-w-4xl', body: body,
+      title: editing ? '編輯訂單 ' + o.orderNo : (isClone ? '複製為新單（' + o.orderNo + '）' : '新下單'), width: 'max-w-4xl', body: body,
       actions: [
         { label: '取消', kind: 'ghost' },
         { label: '儲存訂單', kind: 'primary', onClick: function (close) {
@@ -139,9 +141,9 @@
             customerId: d.customerId, orderDate: d.orderDate, deliveryDate: d.deliveryDate,
             deliveryAddress: d.deliveryAddress, status: d.status, lines: clean
           };
-          var wasShipped = o && o.status === 'shipped';
-          if (o) { Store.update('orders', o.id, payload); }
-          else { payload.orderNo = Store.nextSeq('order', 'SO'); o = Store.insert('orders', payload); }
+          var wasShipped = editing && o.status === 'shipped';
+          if (editing) { Store.update('orders', o.id, payload); }
+          else { payload.orderNo = Store.nextSeq('order', 'SO'); o = Store.insert('orders', payload); editing = true; }
 
           // On transition to "shipped", deduct stock (FIFO) and check reorder
           if (payload.status === 'shipped' && !wasShipped) {
@@ -167,13 +169,14 @@
       title: '⚠ 庫存不足 — 需要補貨', width: 'max-w-lg',
       body: el('div', {}, [
         el('p', { class: 'text-sm text-indigo/80 mb-3', text: '以下貨品低於安全庫存：' + names }),
-        el('p', { class: 'text-xs text-indigo/50', text: '你可以生成補貨 Email，或（若已設定）POST 去供應商 Webhook。' })
+        el('p', { class: 'text-xs text-indigo/50', text: 'POST Webhook 若失敗（或未設定）會自動存入「任務佇列」，唔會漏單。' })
       ]),
       actions: [
         { label: '稍後', kind: 'ghost' },
         { label: 'POST Webhook', kind: 'ghost', onClick: function (close) {
-          Biz.postWebhook(low).then(function () { UI.toast('已送出補貨要求', 'ok'); close(); })
-            .catch(function (e) { UI.toast(e.message, 'err'); }); return false;
+          Biz.sendRestockOrQueue(low).then(function (r) {
+            UI.toast(r.sent ? '已送出補貨要求' : '已存入任務佇列（' + (r.reason || '待處理') + '）', r.sent ? 'ok' : 'warn'); close();
+          }); return false;
         } },
         { label: '生成補貨 Email', kind: 'accent', onClick: function (close) {
           var mail = Biz.reorderEmail(low); window.location.href = Biz.mailtoLink(mail); close();

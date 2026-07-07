@@ -26,7 +26,7 @@
       var reorderBtns = el('div', { class: 'flex gap-2 flex-wrap' }, [
         UI.iconBtn('✉ 生成補貨 Email', 'accent', function () { var m = Biz.reorderEmail(low); window.location.href = Biz.mailtoLink(m); }),
         UI.iconBtn('⇪ POST Webhook', 'ghost', function () {
-          Biz.postWebhook(low).then(function () { UI.toast('已送出補貨要求', 'ok'); }).catch(function (e) { UI.toast(e.message, 'err'); });
+          Biz.sendRestockOrQueue(low).then(function (r) { UI.toast(r.sent ? '已送出補貨要求' : '已存入任務佇列', r.sent ? 'ok' : 'warn'); });
         })
       ]);
       var lowCols = [

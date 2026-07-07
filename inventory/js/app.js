@@ -3,7 +3,7 @@
   'use strict';
   var UI = root.UI, Store = root.Store, el = UI.el;
 
-  var ORDER = ['dashboard', 'products', 'customers', 'orders', 'inventory', 'delivery', 'labels', 'invoices', 'sieve', 'settings'];
+  var ORDER = ['dashboard', 'products', 'customers', 'orders', 'inventory', 'delivery', 'labels', 'invoices', 'queue', 'sieve', 'settings'];
 
   var App = {
     current: 'dashboard',

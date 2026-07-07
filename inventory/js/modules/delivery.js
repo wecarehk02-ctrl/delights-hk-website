@@ -111,14 +111,89 @@
       '</style>';
   }
 
+  // ---- Plain-text delivery note for dot-matrix continuous paper ----------
+  // CJK characters occupy 2 columns in a monospace / dot-matrix font.
+  function dispWidth(s) { var w = 0; for (var i = 0; i < s.length; i++) { w += s.charCodeAt(i) > 0x2e7f ? 2 : 1; } return w; }
+  function padEnd(s, n) { s = String(s == null ? '' : s); var w = dispWidth(s); if (w > n) { // truncate to fit
+      var out = '', ww = 0; for (var i = 0; i < s.length; i++) { var cw = s.charCodeAt(i) > 0x2e7f ? 2 : 1; if (ww + cw > n) break; out += s[i]; ww += cw; } return out + new Array(Math.max(0, n - ww) + 1).join(' '); }
+    return s + new Array(n - w + 1).join(' '); }
+  function padStart(s, n) { s = String(s == null ? '' : s); var w = dispWidth(s); return (w >= n ? s : new Array(n - w + 1).join(' ') + s); }
+  function rule(ch, width) { return new Array(width + 1).join(ch); }
+
+  function noteText(order, width) {
+    var s = Store.settings(); var c = customer(order.customerId) || {};
+    var L = [];
+    L.push(padEnd(s.companyName, width - 18) + padStart('送貨單 DELIVERY NOTE', 18));
+    if (s.companyNameEn) L.push(s.companyNameEn);
+    if (s.companyAddress) L.push(s.companyAddress);
+    L.push('Tel: ' + (s.companyPhone || '') + (s.companyBR ? '   BR: ' + s.companyBR : ''));
+    L.push(rule('=', width));
+    L.push('單號 No.: ' + padEnd(order.orderNo, Math.max(10, width / 2 - 12)) + '下單 Order: ' + UI.fmtDate(order.orderDate));
+    L.push('客戶 To : ' + padEnd(c.name || '', Math.max(10, width / 2 - 12)) + '送貨 Deliv: ' + UI.fmtDate(order.deliveryDate));
+    L.push('送貨地址: ' + (order.deliveryAddress || c.address || ''));
+    L.push(rule('-', width));
+    // columns: # code desc qty unit price amount
+    var wNo = 3, wQty = 6, wUnit = 5, wPrice = 9, wAmt = 11;
+    var wDesc = width - wNo - wQty - wUnit - wPrice - wAmt - 5; if (wDesc < 10) wDesc = 10;
+    L.push(padEnd('#', wNo) + ' ' + padEnd('貨品 Description', wDesc) + ' ' + padStart('數量', wQty) + ' ' + padEnd('單位', wUnit) + ' ' + padStart('單價', wPrice) + ' ' + padStart('金額', wAmt));
+    L.push(rule('-', width));
+    var total = 0, totalQty = 0;
+    (order.lines || []).forEach(function (l, i) {
+      var p = product(l.productId) || {}; var amt = Number(l.qty || 0) * Number(l.unitPrice || 0); total += amt; totalQty += Number(l.qty || 0);
+      L.push(padEnd(i + 1, wNo) + ' ' + padEnd((p.name || l.productId), wDesc) + ' ' + padStart(l.qty, wQty) + ' ' + padEnd(p.unit || '', wUnit) + ' ' + padStart(Number(l.unitPrice || 0).toFixed(2), wPrice) + ' ' + padStart(amt.toFixed(2), wAmt));
+    });
+    L.push(rule('-', width));
+    L.push(padStart('合計 Total:', width - wAmt - wQty - 8) + ' ' + padStart(totalQty, wQty) + '        ' + padStart(total.toFixed(2), wAmt));
+    if (order.note) L.push('備註 Remarks: ' + order.note);
+    L.push(rule('=', width));
+    L.push('');
+    L.push('發貨 Issued: ____________   司機 Driver: ____________   收貨 Received: ____________');
+    L.push('');
+    L.push(padStart('Printed ' + new Date().toISOString().slice(0, 16).replace('T', ' '), width));
+    return L.join('\n');
+  }
+
+  function printText(orderId, width) {
+    var order = Store.get('orders', orderId); if (!order) return;
+    var txt = noteText(order, width);
+    var w = window.open('', '_blank', 'width=780,height=900');
+    w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>DN ' + order.orderNo + '</title>' +
+      '<style>@page{margin:6mm;}body{margin:0;}pre{font-family:"Courier New",monospace;font-size:10pt;line-height:1.2;white-space:pre;}</style></head><body><pre>' +
+      txt.replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</pre></body></html>');
+    w.document.close(); w.focus(); setTimeout(function () { w.print(); }, 300);
+  }
+
   function preview(orderId) {
     var order = Store.get('orders', orderId);
     if (!order) return;
-    var wrap = el('div', { class: 'bg-white border border-indigo/10', style: 'max-height:70vh;overflow:auto;' });
-    wrap.innerHTML = noteCSS() + noteHTML(order);
+    var mode = { type: 'html', width: 80 };
+    var toolbar = el('div', { class: 'flex items-center gap-2 mb-3 flex-wrap' });
+    var wrap = el('div', { class: 'bg-white border border-indigo/10', style: 'max-height:65vh;overflow:auto;' });
+
+    function draw() {
+      if (mode.type === 'html') { wrap.innerHTML = noteCSS() + noteHTML(order); }
+      else {
+        wrap.innerHTML = '';
+        wrap.appendChild(el('pre', { class: 'p-3 text-xs', style: 'font-family:"Courier New",monospace;white-space:pre;', text: noteText(order, mode.width) }));
+      }
+    }
+    function drawToolbar() {
+      toolbar.innerHTML = '';
+      function tab(label, active, on) { return el('button', { class: 'px-3 py-1 text-sm border ' + (active ? 'bg-indigo text-white border-indigo' : 'border-indigo/20 text-indigo hover:bg-indigo/5'), text: label, onclick: on }); }
+      toolbar.appendChild(tab('HTML 版', mode.type === 'html', function () { mode.type = 'html'; drawToolbar(); draw(); }));
+      toolbar.appendChild(tab('純文字 (針機)', mode.type === 'text', function () { mode.type = 'text'; drawToolbar(); draw(); }));
+      if (mode.type === 'text') {
+        toolbar.appendChild(el('span', { class: 'text-xs text-indigo/50 ml-2', text: '欄寬：' }));
+        [80, 96, 132].forEach(function (w) { toolbar.appendChild(tab(w + '欄', mode.width === w, function () { mode.width = w; drawToolbar(); draw(); })); });
+      }
+    }
+    drawToolbar(); draw();
+
     UI.modal({
-      title: '送貨單預覽 ' + order.orderNo, width: 'max-w-4xl', body: wrap,
-      actions: [{ label: '關閉', kind: 'ghost' }, { label: '🖨 列印', kind: 'primary', onClick: function (close) { doPrint(orderId); } }]
+      title: '送貨單預覽 ' + order.orderNo, width: 'max-w-4xl', body: el('div', {}, [toolbar, wrap]),
+      actions: [{ label: '關閉', kind: 'ghost' }, { label: '🖨 列印', kind: 'primary', onClick: function (close) {
+        if (mode.type === 'html') doPrint(orderId); else printText(orderId, mode.width);
+      } }]
     });
   }
 

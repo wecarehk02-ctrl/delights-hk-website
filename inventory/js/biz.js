@@ -89,6 +89,41 @@
       });
     },
 
+    // ---- Durable task queue (failed webhooks / emails don't vanish) ------
+    enqueueTask: function (type, title, payload) {
+      return Store.insert('queue', { type: type, title: title, payload: payload, status: 'pending', attempts: 0, lastError: '' });
+    },
+    // POST a raw payload to the reorder webhook (used for retry).
+    runWebhook: function (payload) {
+      var s = Store.settings();
+      if (!s.reorderWebhook) return Promise.reject(new Error('未設定 Webhook URL'));
+      return fetch(s.reorderWebhook, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+      }).then(function (r) { if (!r.ok) throw new Error('Webhook 回應 ' + r.status); return r; });
+    },
+    // Try webhook; on ANY failure, drop a durable task into the queue so the
+    // restock is never silently lost. Returns a promise that never rejects.
+    sendRestockOrQueue: function (items) {
+      var s = Store.settings();
+      var payload = {
+        type: 'reorder', company: s.companyName, createdAt: new Date().toISOString(),
+        items: items.map(function (it) {
+          return { sku: it.product.sku, name: it.product.name, onHand: it.qty, reorderLevel: it.reorderLevel, reorderQty: Number(it.product.reorderQty || 0), unit: it.product.unit || '', supplierEmail: it.product.supplierEmail || '' };
+        })
+      };
+      var title = '補貨 ' + items.map(function (i) { return i.product.name; }).join('、');
+      if (!s.reorderWebhook) {
+        Biz.enqueueTask('restock-webhook', title, payload);
+        return Promise.resolve({ queued: true, reason: 'no-webhook' });
+      }
+      return Biz.runWebhook(payload).then(function () {
+        return { sent: true };
+      }).catch(function (e) {
+        Biz.enqueueTask('restock-webhook', title, payload);
+        return { queued: true, reason: e.message };
+      });
+    },
+
     // ---- Stock deduction on shipping (FIFO by expiry) --------------------
     deductStock: function (productId, qty) {
       var lots = Biz.lotsForProduct(productId).slice().sort(function (a, b) {

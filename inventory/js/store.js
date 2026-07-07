@@ -115,7 +115,7 @@
     exportAll: function () {
       var out = { _meta: { app: 'delights-inventory', version: 1, exportedAt: nowISO() } };
       var cols = ['productSchema', 'products', 'customers', 'stockLots', 'orders',
-        'invoices', 'pricingTiers', 'sieveLog', 'settings', '_seq'];
+        'invoices', 'pricingTiers', 'sieveLog', 'queue', 'settings', '_seq'];
       cols.forEach(function (c) {
         var d = Store.adapter.readAll(c);
         if (d != null) out[c] = d;
