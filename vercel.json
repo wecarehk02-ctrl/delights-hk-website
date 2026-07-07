@@ -1,4 +1,12 @@
 {
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "database.delights.hk" }],
+      "destination": "/inventory/",
+      "permanent": false
+    }
+  ]
 }
