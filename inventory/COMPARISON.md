@@ -21,7 +21,12 @@
 | 訂單操作 | 新增/編輯/刪除 | 另有**複製舊單**（duplicate back into form） | **B 構想較好**（日常落單快很多） |
 | 發票 email | 無 | 發票可入 email 佇列經 webhook 發送 | B 構想可併入佇列移植 |
 
-## 值得移植到 A 的三個構想（按價值序）
+## 值得移植到 A 的三個構想（✅ 2026-07-07 已全部整合入 A）
+
+> 狀態：三項已實作並通過瀏覽器 e2e。失敗任務佇列 = `modules/queue.js` +
+> `Biz.sendRestockOrQueue`；複製舊單 = 下單列表「複製」掣；純文字送貨單 =
+> 送貨單預覽「純文字 (針機)」80/96/132 欄。以下保留原分析作記錄。
+
 
 1. **失敗任務佇列**：補貨 email/webhook 失敗時不應只 toast 一下就算；應寫入 `queue` collection（`{type, payload, status, createdAt}`），設「待處理任務」清單供重試。B 的 payload 格式（HANDOFF.md「API / Webhook Contracts」一節）可直接沿用。
 2. **複製舊單**：訂單列表加「複製」按鈕，把整張單帶回表單改日期即可重下。餐飲客戶每日下重複單，這是高頻操作。
