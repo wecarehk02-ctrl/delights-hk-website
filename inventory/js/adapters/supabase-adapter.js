@@ -7,9 +7,11 @@
  * Supabase in the background. On boot / realtime change, cloud data is pulled
  * back into the cache and the current view re-renders.
  *
- * Storage model mirrors the local one exactly: one row per collection holding
- * the whole JSON blob (table public.inventory_store: collection PK, data jsonb).
- * Whole-collection, last-write-wins — simple and robust for a small team.
+ * Storage model — ROW-LEVEL (see inventory/DATABASE.md): one row PER DOCUMENT
+ * in table public.inventory_docs (collection, doc_id, data jsonb, deleted).
+ * Writes diff each collection and upsert only the changed documents, so two
+ * devices editing DIFFERENT records never clobber each other. Singleton
+ * collections (settings/_seq/productSchema) are stored as one row, doc_id='_doc'.
  *
  * Config (URL + anon key + auth choice) lives in a raw localStorage key, NOT in
  * a synced collection. Credentials are entered by the user in Settings.
@@ -18,8 +20,18 @@
   'use strict';
   var Store = root.Store;
   var cache = Store.LocalAdapter;            // synchronous offline cache
+  var TABLE = 'inventory_docs';
   var CFG_KEY = 'delights_inv_cloud_cfg';
-  var DIRTY_KEY = 'delights_inv_cloud_dirty';
+  var OPS_KEY = 'delights_inv_cloud_ops';    // pending per-document sync ops
+  var SEP = '::';
+
+  // Collections stored as one row PER document (items must carry an `id`).
+  // Everything else (settings, _seq, productSchema) is a singleton blob.
+  var DOC_COLLECTIONS = {
+    products: 1, customers: 1, orders: 1, invoices: 1,
+    stockLots: 1, pricingTiers: 1, sieveLog: 1, queue: 1
+  };
+  function isDocCollection(c) { return DOC_COLLECTIONS.hasOwnProperty(c); }
 
   function loadRaw(key, def) { try { var v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch (e) { return def; } }
   function saveRaw(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
@@ -47,14 +59,47 @@
     adapter: {
       ready: function () { return true; },
       readAll: function (c) { return cache.readAll(c); },
-      writeAll: function (c, data) { cache.writeAll(c, data); Cloud.markDirty(c); Cloud.scheduleFlush(); return true; },
+      writeAll: function (c, data) {
+        var old = cache.readAll(c);           // snapshot BEFORE overwrite, for diff
+        cache.writeAll(c, data);
+        Cloud.enqueueDiff(c, old, data);
+        Cloud.scheduleFlush();
+        return true;
+      },
       keys: function () { return cache.keys(); }
     },
 
-    // ---- dirty queue (for offline resilience) ---------------------------
-    markDirty: function (c) { var d = loadRaw(DIRTY_KEY, {}); d[c] = 1; saveRaw(DIRTY_KEY, d); },
-    _dirtyList: function () { return Object.keys(loadRaw(DIRTY_KEY, {})); },
-    _clearDirty: function (c) { var d = loadRaw(DIRTY_KEY, {}); delete d[c]; saveRaw(DIRTY_KEY, d); },
+    // ---- pending per-document ops (offline-resilient, row-level) ---------
+    // ops key = "collection<SEP>doc_id" -> { collection, docId, op:'up'|'del', data }
+    _ops: function () { return loadRaw(OPS_KEY, {}); },
+    _saveOps: function (o) { saveRaw(OPS_KEY, o); },
+    _enqueue: function (collection, docId, op, data) {
+      var o = this._ops();
+      o[collection + SEP + docId] = { collection: collection, docId: docId, op: op, data: data };
+      this._saveOps(o);
+    },
+    // Diff a collection's old vs new value and enqueue only what changed.
+    enqueueDiff: function (collection, oldVal, newVal) {
+      if (!isDocCollection(collection)) {      // singleton -> single blob row
+        this._enqueue(collection, '_doc', 'up', newVal == null ? [] : newVal);
+        return;
+      }
+      var oldArr = Array.isArray(oldVal) ? oldVal : [];
+      var newArr = Array.isArray(newVal) ? newVal : [];
+      var oldById = {}, newById = {};
+      oldArr.forEach(function (d) { if (d && d.id != null) oldById[d.id] = d; });
+      newArr.forEach(function (d) { if (d && d.id != null) newById[d.id] = d; });
+      var self = this;
+      newArr.forEach(function (d) {
+        if (d && d.id != null) {
+          var prev = oldById[d.id];
+          if (!prev || JSON.stringify(prev) !== JSON.stringify(d)) self._enqueue(collection, String(d.id), 'up', d);
+        }
+      });
+      Object.keys(oldById).forEach(function (id) {
+        if (!newById.hasOwnProperty(id)) self._enqueue(collection, String(id), 'del', oldById[id]);
+      });
+    },
 
     // ---- lifecycle -------------------------------------------------------
     init: function () {
@@ -96,10 +141,13 @@
     _afterAuth: function (done) {
       var self = this;
       this._setStatus('connecting');
-      this.pull().then(function () {
-        // first-time cloud: empty -> seed locally then push up
-        if (cache.readAll('productSchema') == null) { Store.ensureSeed(); self._markAllDirty(); }
-        return self.flush();
+      // Push any local offline edits first, then pull cloud state. Flushing
+      // before pulling means our unsynced docs are not lost to the pull.
+      this.flush().then(function () {
+        return self.pull();
+      }).then(function () {
+        // first-time cloud: empty -> seed locally (auto-enqueues) then push up
+        if (cache.readAll('productSchema') == null) { Store.ensureSeed(); return self.flush(); }
       }).then(function () {
         self.subscribe();
         self._setStatus('online');
@@ -112,26 +160,38 @@
       });
     },
 
-    _markAllDirty: function () {
-      var cols = ['productSchema', 'products', 'customers', 'stockLots', 'orders', 'invoices', 'pricingTiers', 'sieveLog', 'settings', '_seq'];
-      cols.forEach(function (c) { if (cache.readAll(c) != null) Cloud.markDirty(c); });
+    // ---- sync (row-level) ------------------------------------------------
+    // Rebuild the local cache from cloud rows, one collection at a time.
+    _applyRows: function (rows, onlyCollection) {
+      var byColl = {};
+      (rows || []).forEach(function (row) {
+        var c = row.collection;
+        if (!byColl[c]) byColl[c] = { docs: [], singleton: undefined };
+        if (row.deleted) return;                      // skip tombstones
+        if (row.doc_id === '_doc') byColl[c].singleton = row.data;
+        else byColl[c].docs.push(row.data);
+      });
+      Object.keys(byColl).forEach(function (c) {
+        if (onlyCollection && c !== onlyCollection) return;
+        if (isDocCollection(c)) cache.writeAll(c, byColl[c].docs);       // pure cache write, no enqueue
+        else if (byColl[c].singleton !== undefined) cache.writeAll(c, byColl[c].singleton);
+      });
+      Store._emit('*');
     },
-
-    // ---- sync ------------------------------------------------------------
     pull: function () {
+      var self = this;
       if (!this.client) return Promise.resolve();
-      return this.client.from('inventory_store').select('collection,data').then(function (res) {
+      return this.client.from(TABLE).select('collection,doc_id,data,deleted').then(function (res) {
         if (res.error) throw res.error;
-        (res.data || []).forEach(function (row) { cache.writeAll(row.collection, row.data); });
-        Store._emit('*');
+        self._applyRows(res.data, null);
       });
     },
     pullOne: function (collection) {
+      var self = this;
       if (!this.client) return;
-      this.client.from('inventory_store').select('data').eq('collection', collection).maybeSingle().then(function (res) {
-        if (res.error || !res.data) return;
-        cache.writeAll(collection, res.data.data);
-        Store._emit('*');
+      this.client.from(TABLE).select('collection,doc_id,data,deleted').eq('collection', collection).then(function (res) {
+        if (res.error) return;
+        self._applyRows(res.data, collection);
       });
     },
     scheduleFlush: function () {
@@ -144,23 +204,27 @@
       if (!this.client) return Promise.resolve();
       var c = this.config();
       if (c.requireAuth && !this.session) return Promise.resolve(); // wait until logged in
-      var dirty = this._dirtyList();
-      if (!dirty.length) return Promise.resolve();
-      var rows = dirty.map(function (col) {
-        var data = cache.readAll(col); if (data == null) data = [];
-        return { collection: col, data: data, updated_at: new Date().toISOString() };
+      var ops = this._ops();
+      var keys = Object.keys(ops);
+      if (!keys.length) return Promise.resolve();
+      var rows = keys.map(function (k) {
+        var o = ops[k];
+        return { collection: o.collection, doc_id: o.docId, data: o.data == null ? {} : o.data, deleted: o.op === 'del', updated_at: new Date().toISOString() };
       });
-      return this.client.from('inventory_store').upsert(rows, { onConflict: 'collection' }).then(function (res) {
+      return this.client.from(TABLE).upsert(rows, { onConflict: 'collection,doc_id' }).then(function (res) {
         if (res.error) { self._setStatus('offline', res.error.message); throw res.error; }
-        dirty.forEach(function (col) { self._clearDirty(col); });
+        // clear only ops we flushed AND that were not re-edited during the flush
+        var cur = self._ops();
+        keys.forEach(function (k) { if (cur[k] && JSON.stringify(cur[k]) === JSON.stringify(ops[k])) delete cur[k]; });
+        self._saveOps(cur);
         self._setStatus('online');
       }).catch(function (e) { self._setStatus('offline', e.message); });
     },
     subscribe: function () {
       var self = this;
       if (!this.client || this.channel) return;
-      this.channel = this.client.channel('inv_store')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'inventory_store' }, function (payload) {
+      this.channel = this.client.channel('inv_docs')
+        .on('postgres_changes', { event: '*', schema: 'public', table: TABLE }, function (payload) {
           var coll = (payload.new && payload.new.collection) || (payload.old && payload.old.collection);
           if (coll) self.pullOne(coll);
         })
