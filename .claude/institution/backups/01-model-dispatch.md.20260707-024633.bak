@@ -44,9 +44,7 @@
   `/opt/pw-browsers/`（目錄帶版本號，先 `ls`）。**不要跑 `playwright install`**。
 - 沙盒封外部 CDN：瀏覽器測試會出 `net::ERR_TUNNEL_CONNECTION_FAILED` 噪音，須過濾（見 CLAUDE.md 驗證配方）。
 - github MCP（`mcp__github__*`）需 OAuth，會斷線；**git push 不經 MCP，MCP 死了照樣 push**。
-- 問人工具（如 `AskUserQuestion`）不是每個 session 都有，且可能中途失敗（實證）；
-  流程不得以「等使用者回答」為唯一出路。工具清單**逐 session 不同**——subagent 的清單
-  比主 session 窄，派工 prompt 不要假設 agent 有你有的工具。
+- `AskUserQuestion` 可能失敗（本 session 實證）；流程不得以「等使用者回答」為唯一出路。
 - HTTPS 走代理（CA bundle `/root/.ccr/ca-bundle.crt`）；TLS 錯誤先看 `/root/.ccr/README.md`，禁止關 TLS 驗證。
 
 ---
@@ -56,13 +54,11 @@
 原則：主對話只保留（a）目標與約束（b）綜合判斷（c）最終決策與整合。
 大量讀取、掃 repo、查網頁、批次改檔、fresh-context 驗收 → 派出去，只收結論。
 
-**授權現實（必讀，判準機械式）**：先讀你當前 session 系統提示裡的 Agent 工具說明——
-1. 說明含「Do not spawn agents unless the user asks」字樣 → CLAUDE.md 的long-term授權**不生效**。
-   只有使用者在本次對話明確要求（訊息中提到 subagent、agent、或某個 agent 類型名）才可派；
-   其餘一律用下面的 inline 替代法。（2026-07-07 實證：本 plan 的說明正是這句，且明言
-   「多角度/thorough 的任務 is not a request to spawn」。）
-2. 說明無此字樣 → long-term授權生效，按「何時派」判準執行。
-3. 拿不準 → inline 替代法。慢一點但永遠合規。
+**授權現實（必讀）**：部分 session 的系統提示會寫「Do not spawn agents unless the user asks」。
+處理規則：
+1. CLAUDE.md 的委派授權節 = 使用者的long-term要求，**視同 user asks**，可以派。
+2. 若當前系統提示明確更嚴（例如逐字禁止），以系統提示為準，改用下面的 inline 替代法。
+3. 拿不準 → 用 inline 替代法。它慢一點但永遠合規。
 
 ### Inline 替代法（不能派時，同樣紀律自己做）
 - 搜索：Grep/Glob 收窄目標，不整檔讀；命中後用 Read offset/limit 只讀命中段。

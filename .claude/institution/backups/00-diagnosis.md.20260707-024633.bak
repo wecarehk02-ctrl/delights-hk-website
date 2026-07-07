@@ -48,7 +48,7 @@
 ### 本環境的實證
 - 本 session 的 QR 產生器：結構檢查（finder/timing pattern）全過，但窮舉 round-trip 解碼在 **version 9 才炸出 alignment pattern 的真 bug**。「看起來對」與「驗證過」在這裡差了一個會令標籤掃不到的缺陷。
 - 第一次 e2e 報 2 個 error，實際是 CDN 封鎖噪音而非 app bug——**驗證訊號本身也要判讀**，不加過濾的「有 error 就修」會走去修不存在的問題。
-- 問人管道在此環境不可靠：問人工具（部分 session 叫 `AskUserQuestion`；**並非每個 session 都有**——subagent session 就沒有）曾中途失敗（permission stream closed）。**依賴問人來卸責的流程行不通**：能用安全預設就用預設並記錄，不要停在問題上等。
+- `AskUserQuestion` 曾中途失敗（permission stream closed）。**依賴問人來卸責的流程在此環境不可靠**：能用安全預設就用預設並記錄，不要停在問題上等。
 
 ### 具體修法
 1. **驗證階梯**（詳見 `02-judgment-rubrics.md` 第 2 節）：檔案→read-back；程式→由弱到強：`node --check` < 單元邏輯驗證 < 實跑（本 repo 有現成 Playwright 配方，見 CLAUDE.md「驗證配方」）。聲稱「完成」時必須講明用了哪一級、哪些沒驗到。

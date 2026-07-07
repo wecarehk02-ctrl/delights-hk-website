@@ -33,11 +33,8 @@
 - B 的密碼混淆（A 已有 RLS 真保護）
 - B 的單檔架構
 
-## 佐證（快照，不可再核對）
+## 佐證
 
-**注意**：B 版 zip 只存在於 2026-07-07 該 session 的臨時目錄，**已不在本 repo / workspace**。
-以下 file:line 是當時的讀取快照，供理解結論；未來 session 無法（也不需要）重新開啟核對。
-
-- B 的 QR 上限：當時 `app.js:977` `if (bytes.length > 17) throw new Error("Version 1-L QR can hold 17 bytes.")`
-- B 的欄寬選項：當時 `app.js:774` `const width = Number($("#dotMatrixWidth").value || 80)`
-- B 的自我評估：當時 `HANDOFF.md` 「Important Limitations」一節
+- B 的 QR 上限：`zip1/app.js:977` `if (bytes.length > 17) throw new Error("Version 1-L QR can hold 17 bytes.")`
+- B 的欄寬選項：`zip1/app.js:774` `const width = Number($("#dotMatrixWidth").value || 80)`
+- B 的自我評估：`zip1/HANDOFF.md` 「Important Limitations」一節

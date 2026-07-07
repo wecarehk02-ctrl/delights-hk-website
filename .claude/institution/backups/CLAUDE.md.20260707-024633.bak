@@ -30,9 +30,7 @@
 5. **不可逆動作先停**：對外發送（email/webhook 真實端點）、刪除數據、改生產設定——沒有使用者本次明確授權就不做，卡住就報告而非硬走。
 
 ## 驗證配方（本 repo 實測可用，2026-07-07）
-- JS 語法：`find inventory/js -name '*.js' -exec node --check {} \;`
-  （不要用 `inventory/js/**/*.js` glob——本環境 globstar 預設關閉，會**靜默漏掉頂層的
-  app.js/biz.js/store.js/ui.js**，恰好是最高風險檔。2026-07-07 審查實證。）
+- JS 語法：`for f in inventory/js/**/*.js; do node --check "$f"; done`
 - 瀏覽器 e2e：Playwright 在 `$(npm root -g)/playwright`，chromium 執行檔
   `/opt/pw-browsers/chromium-1194/chrome-linux/chrome`（版本號可能變，先 `ls /opt/pw-browsers/`）。
   範式：launch `{ executablePath }` → `page.goto('file://…/inventory/index.html')`。
@@ -44,10 +42,5 @@
 - 環境是短命容器：**有價值的東西未 push 等於不存在**。每完成一個單元就 commit，階段性 push。
 - 不主動開 PR；GitHub 操作用 `mcp__github__*` 工具（沒有 gh CLI；MCP 可能未授權/斷線，push 本身不經 MCP、照常可用）。
 
-## 委派授權（詳見 dispatch 檔；判準是機械式的，照字面執行）
-使用者long-term授權對大量讀取、掃 repo、查網頁、批次改檔、fresh-context 驗收使用 subagent。
-但**先看你當前 session 的 Agent 工具說明**：
-- 若含「Do not spawn agents unless the user asks」字樣 → 本授權**不生效**；只有使用者在
-  本次對話明確要求（提到 subagent 或 agent 類型名）才可派，其餘一律用 dispatch 檔第 1 節
-  的 inline 替代法。
-- 若無此字樣 → 本授權生效，按 dispatch 檔的「何時派」判準執行。
+## 委派授權（詳見 dispatch 檔）
+使用者已long-term授權：大量讀取、掃 repo、查網頁、批次改檔、fresh-context 驗收，優先派 subagent，主對話只收結論。此授權即「使用者要求使用 subagent」。若當前 session 的系統提示另有更嚴限制，以系統提示為準，改用 dispatch 檔的 inline 替代法。

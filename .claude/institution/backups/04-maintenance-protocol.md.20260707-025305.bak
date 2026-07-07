@@ -81,19 +81,3 @@ Evidence:（命令、file:line、工具輸出或使用者糾正）
   （`fable5institutionpack.zip`）的結構與部分規則，**全部工具/模型名重新錨定到本 Claude Code
   harness 實測清單**（該包的 `multi_agent_v1.*`/`gpt-5.*` 在本環境不存在）。
   證據: 本 session tool schema + zip 內容比對。
-- 2026-07-07: CLAUDE.md — 驗證配方由 `**` glob 改為 `find`，原配方在 globstar 關閉（本環境
-  預設）時靜默漏掃頂層 4 檔（含 biz.js/store.js）— 證據: fresh-context 審查實測 + find 計數 16 檔。
-- 2026-07-07: CLAUDE.md + 01-model-dispatch.md — 委派授權判準改為機械式字串判斷（Agent 工具
-  說明含「Do not spawn agents unless the user asks」即long-term授權不生效）— 證據: 審查指出原
-  調和規則在條件式禁止下會被弱模型推理成可派。
-- 2026-07-07: 00/01/02 — 問人工具提法一般化（不綁定 `AskUserQuestion` 名字；工具清單逐
-  session 不同，subagent 清單較窄）— 證據: 審查 agent 自身 session 無此工具。
-
-### Lesson 2026-07-07 — Glob 配方的假通過訊號
-Trigger: 制度檔的驗證配方寫 `inventory/js/**/*.js`，作者環境下手動驗過「全過」。
-Failure mode: globstar 預設關閉時 `**` 退化為單層，靜默漏掃 4 個頂層檔（恰含最高風險的
-庫存扣減與備份匯出邏輯），且零錯誤輸出——弱模型會據此誤報「已驗證」。
-Rule update: 制度檔裡的驗證命令一律用 `find`/明確枚舉，不用依賴 shell 選項的 glob；
-寫入配方前先驗證「命中數 == 預期檔案數」，把預期數寫進配方旁註。
-Evidence: fresh-context 審查（2026-07-07）實測 `shopt globstar` off；`find | wc -l` = 16 對比
-glob 展開 12。
