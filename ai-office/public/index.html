@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI 辦公室</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>🏢 AI 辦公室</h1>
+    <span id="mockBadge" class="badge hidden">MOCK MODE（未連Bedrock）</span>
+  </header>
+
+  <main>
+    <section class="new-task-panel">
+      <h2>新增task</h2>
+      <form id="taskForm">
+        <label>
+          揀persona
+          <select id="personaSelect" required></select>
+        </label>
+        <p id="personaDescription" class="persona-desc"></p>
+        <label>
+          Task內容
+          <textarea id="taskDescription" rows="3" placeholder="想個agent做啲乜？" required></textarea>
+        </label>
+        <button type="submit">指派task</button>
+      </form>
+    </section>
+
+    <section class="board">
+      <div class="column" data-status="executing">
+        <h3>執行中</h3>
+        <div class="cards" id="col-executing"></div>
+      </div>
+      <div class="column" data-status="completed">
+        <h3>完成</h3>
+        <div class="cards" id="col-completed"></div>
+      </div>
+      <div class="column" data-status="failed">
+        <h3>失敗</h3>
+        <div class="cards" id="col-failed"></div>
+      </div>
+    </section>
+  </main>
+
+  <div id="modalOverlay" class="modal-overlay hidden">
+    <div class="modal">
+      <button id="modalClose" class="modal-close">✕</button>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
