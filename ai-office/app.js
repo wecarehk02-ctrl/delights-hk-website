@@ -4,6 +4,7 @@ const personaSelect = document.getElementById("personaSelect");
 const personaDescription = document.getElementById("personaDescription");
 const taskForm = document.getElementById("taskForm");
 const taskDescription = document.getElementById("taskDescription");
+const submitBtn = document.getElementById("submitBtn");
 const mockBadge = document.getElementById("mockBadge");
 const modalOverlay = document.getElementById("modalOverlay");
 const modalBody = document.getElementById("modalBody");
@@ -17,7 +18,7 @@ async function loadPersonas() {
   if (data.mockMode) mockBadge.classList.remove("hidden");
 
   personaSelect.innerHTML = state.personas
-    .map((p) => `<option value="${p.id}">${p.title}</option>`)
+    .map((p) => `<option value="${p.id}">${escapeHtml(p.title)}</option>`)
     .join("");
 
   updatePersonaDescription();
@@ -36,26 +37,46 @@ taskForm.addEventListener("submit", async (e) => {
   const description = taskDescription.value.trim();
   if (!personaId || !description) return;
 
-  const res = await fetch("/api/tasks", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ personaId, description }),
+  const persona = state.personas.find((p) => p.id === personaId);
+
+  // 樂觀更新：即刻喺「執行中」欄放一張暫時卡，唔使等 Claude 覆完先見到
+  state.tasks.unshift({
+    id: "temp-" + Date.now(),
+    personaId,
+    personaTitle: persona ? persona.title : personaId,
+    description,
+    status: "executing",
+    createdAt: new Date().toISOString(),
   });
+  renderBoard();
 
-  if (!res.ok) {
-    const err = await res.json();
-    alert("建立task失敗：" + (err.error || res.statusText));
-    return;
+  submitBtn.disabled = true;
+  submitBtn.textContent = "指派緊…";
+  try {
+    const res = await fetch("/api/tasks", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ personaId, description }),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      alert("建立task失敗：" + (err.error || res.statusText));
+    } else {
+      taskDescription.value = "";
+    }
+  } catch (err) {
+    alert("建立task失敗：" + err.message);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = "指派task";
+    await loadTasks();
   }
-
-  taskDescription.value = "";
-  await loadTasks();
 });
 
 async function loadTasks() {
   const res = await fetch("/api/tasks");
   const data = await res.json();
-  state.tasks = data.tasks;
+  state.tasks = data.tasks || [];
   renderBoard();
 }
 
@@ -122,11 +143,11 @@ modalOverlay.addEventListener("click", (e) => {
 
 function escapeHtml(str) {
   const div = document.createElement("div");
-  div.textContent = str;
+  div.textContent = str == null ? "" : String(str);
   return div.innerHTML;
 }
 
-// Poll every 3秒，等執行緊嘅task有結果時可以自動update board
+// 每 3 秒 poll 一次，等執行緊嘅 task 有結果時自動 update
 async function init() {
   await loadPersonas();
   await loadTasks();

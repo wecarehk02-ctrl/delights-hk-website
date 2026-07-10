@@ -1,5 +1,6 @@
 node_modules/
 .env
-data/tasks.json
+.env.local
+.vercel
 *.log
 .DS_Store
