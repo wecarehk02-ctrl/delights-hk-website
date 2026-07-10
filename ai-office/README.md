@@ -38,14 +38,14 @@ middleware.js   全站 basic auth（單一共用密碼）
 ## 加/改 persona
 
 改 `personas/*.md`（第一個 `# 標題` 做名，第一段做 description，全文做 system prompt），
-然後 `npm run build`（或者下次 Vercel 部署會自動重新產生）。
+然後 `npm run generate-personas`（或者下次 Vercel 部署會自動重新產生）。
 
 ## 本機開發
 
 ```bash
 npm install
 cp .env.example .env    # 填返你嘅值
-npm run build           # 產生 lib/personas.data.js
+npm run generate-personas           # 產生 lib/personas.data.js
 npx vercel dev          # 本機行 Vercel functions
 ```
 
