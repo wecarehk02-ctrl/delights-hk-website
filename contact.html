@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>聯絡我們 | 帝樂食研所</title>
+  <meta name="description" content="聯絡帝樂食研所，預約試菜、索取報價或了解產品方案。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="main.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要內容</a>
+
+  <header class="site-header">
+    <div class="top-strip">
+      <span>Global Premium Meat Supply</span>
+      <span>Official Wen's Ingredients Agent</span>
+      <span>HK Food Lab & Cold Chain</span>
+    </div>
+    <div class="nav-wrap">
+      <a class="brand" href="index.html" aria-label="返回頁頂">
+        <span class="brand-mark"><img src="assets/delights-mark-dark-web.png" alt="帝樂食研所 Logo"></span>
+        <span class="brand-copy">
+          <strong>帝樂食研所</strong>
+          <span>DELIGHTS FOOD LAB</span>
+        </span>
+      </a>
+      <nav class="desktop-nav" aria-label="主要導覽">
+        <a href="index.html">首頁</a>
+        <a href="about.html">雙城根基</a>
+        <a href="process.html">培育流程</a>
+        <a href="products.html">產品方案</a>
+        <a href="quality.html">品質冷鏈</a>
+        <a href="contact.html" class="active">聯絡我們</a>
+      </nav>
+      <button class="menu-button" type="button" aria-label="開啟選單" aria-expanded="false" aria-controls="mobileNav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <nav id="mobileNav" class="mobile-nav" aria-label="流動導覽">
+      <a href="index.html">首頁</a>
+      <a href="about.html">雙城根基</a>
+      <a href="process.html">培育流程</a>
+      <a href="products.html">產品方案</a>
+      <a href="quality.html">品質冷鏈</a>
+      <a href="contact.html" class="active">聯絡我們</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section id="contact" class="section">
+          <div class="container">
+            <div class="contact-shell reveal">
+              <div class="contact-copy">
+                <p class="eyebrow">Start Partnership</p>
+                <h2>聯絡我們</h2>
+                <p>預約參觀香港工場、索取產品目錄及報價、或預約試菜 / 樣品，請留下你的需求。</p>
+                <p>為了更快回覆，建議提供預計每週用量、目標產品類型、交付地點及是否需要 OEM/ODM 研發。若你正在規劃新店或新菜單，也可以先以試菜形式開始。</p>
+                <div class="contact-details">
+                  <div>
+                    <strong>電話</strong>
+                    <a href="tel:+85269534679">+852 69534679</a>
+                  </div>
+                  <div>
+                    <strong>電郵</strong>
+                    <a href="mailto:info@delights.hk">info@delights.hk</a>
+                  </div>
+                  <div>
+                    <strong>香港工場地址</strong>
+                    <span>荃灣荃運工業中心2期2樓K</span>
+                  </div>
+                </div>
+              </div>
+              <form id="contactForm">
+                <div class="form-grid">
+                  <label>公司名稱 *
+                    <input type="text" name="company" autocomplete="organization" required>
+                  </label>
+                  <label>聯絡人姓名 *
+                    <input type="text" name="name" autocomplete="name" required>
+                  </label>
+                  <label>聯絡電話 *
+                    <input type="tel" name="phone" autocomplete="tel" required>
+                  </label>
+                  <label>電郵地址
+                    <input type="email" name="email" autocomplete="email">
+                  </label>
+                </div>
+                <fieldset style="border: 0; padding: 0; margin: 0;">
+                  <legend style="font-weight: 900; margin-bottom: 10px;">感興趣的產品 / 服務</legend>
+                  <div class="choice-grid">
+                    <label class="choice"><input type="checkbox" name="interest" value="poultry"> 優質家禽畜</label>
+                    <label class="choice"><input type="checkbox" name="interest" value="sauce"> 風味醬汁雞</label>
+                    <label class="choice"><input type="checkbox" name="interest" value="kitchen"> 遠程中央廚房方案</label>
+                    <label class="choice"><input type="checkbox" name="interest" value="oem"> 代客研發 / OEM</label>
+                  </div>
+                </fieldset>
+                <label>查詢詳情
+                  <textarea name="message" placeholder="例如：每週用量、希望報價的產品、是否需要試菜或 OEM 研發。"></textarea>
+                </label>
+                <div id="successMsg" class="success" role="status">已收到表單內容。正式上線時可接駁 CRM、WhatsApp 或電郵通知。</div>
+                <button class="button dark" type="submit">提交查詢</button>
+              </form>
+            </div>
+            <div class="contact-next-grid">
+              <article class="contact-next-card reveal">
+                <span>01</span>
+                <h3>初步了解需求</h3>
+                <p>我們會先確認你的門店類型、每週用量、目標產品及交付地點，再判斷適合由現成 SKU、試菜或定制研發開始。</p>
+              </article>
+              <article class="contact-next-card reveal" style="transition-delay: 80ms;">
+                <span>02</span>
+                <h3>提供試菜或報價方向</h3>
+                <p>如需求清晰，可安排產品目錄、樣品、試菜或初步報價；如仍在構思菜單，會先建議可行的產品路線。</p>
+              </article>
+              <article class="contact-next-card reveal" style="transition-delay: 160ms;">
+                <span>03</span>
+                <h3>確認供應與交付節奏</h3>
+                <p>確認規格後，可再討論固定供應週期、包裝方式、冷鏈配送、門店收貨及後續新品研發安排。</p>
+              </article>
+            </div>
+            <div class="content-split contact-support reveal">
+              <div>
+                <p class="eyebrow">What To Prepare</p>
+                <h2>查詢時提供以下資料，會更快得到準確建議。</h2>
+                <ul class="feature-list">
+                  <li><strong>現有門店：</strong><span>分店數量、每週肉品用量、現時採購痛點、目標成本。</span></li>
+                  <li><strong>新菜單：</strong><span>想推出的菜式、目標售價、出餐方式、是否需要醬汁或預製。</span></li>
+                  <li><strong>零售 / OEM：</strong><span>包裝形式、保存方式、預計首批數量及品牌定位。</span></li>
+                </ul>
+              </div>
+              <figure class="image-slot">
+                <img src="assets/wens/optimized/wens-building.webp" alt="溫氏源頭與供應基地示意">
+                <figcaption>圖片位置：客戶洽談 / 試菜 / 工場參觀相片，可替換為正式合作場景。</figcaption>
+              </figure>
+            </div>
+          </div>
+        </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand-block">
+          <div class="footer-logo">
+            <img src="assets/delights-mark-white-web.png" alt="">
+            <span>
+              <strong>帝樂食研所</strong>
+              <span>DELIGHTS FOOD LAB</span>
+            </span>
+          </div>
+          <p>全球優質肉品供應、溫氏食材官方代理、香港工場研發與冷鏈配送支援。</p>
+        </div>
+        <div class="footer-links">
+          <h4>快速連結</h4>
+          <ul>
+            <li><a href="index.html">首頁</a></li>
+            <li><a href="products.html">產品方案</a></li>
+            <li><a href="process.html">培育流程</a></li>
+            <li><a href="about.html">關於我們</a></li>
+            <li><a href="contact.html">聯絡我們</a></li>
+          </ul>
+        </div>
+        <div class="footer-contact">
+          <h4>聯絡資料</h4>
+          <ul>
+            <li><strong>電話</strong><a href="tel:+85269534679">+852 69534679</a></li>
+            <li><strong>電郵</strong><a href="mailto:info@delights.hk">info@delights.hk</a></li>
+            <li><strong>香港工場</strong><span>荃灣荃運工業中心2期2樓K</span></li>
+          </ul>
+        </div>
+        <div class="footer-social">
+          <h4>關注我們</h4>
+          <!-- TODO: 補充實際社交媒體連結 -->
+          <div class="social-icons">
+            <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4h-3c-3.1 0-5 1.9-5 5v2H6v4h3v5h4v-5h3.2l.8-4h-4V9c0-.7.3-1 1-1Z"/></svg></a>
+            <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4Zm0 2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H7Zm5 3.5A3.5 3.5 0 1 1 12 15.5 3.5 3.5 0 0 1 12 8.5Zm0 2A1.5 1.5 0 1 0 12 13.5 1.5 1.5 0 0 0 12 10.5ZM17.5 7a1 1 0 1 1-1 1 1 1 0 0 1 1-1Z"/></svg></a>
+            <a href="https://wa.me/85269534679" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a8.7 8.7 0 0 0-7.5 13.1L3.5 21l5-1.3A8.7 8.7 0 1 0 12 3Zm0 2a6.7 6.7 0 1 1-3.1 12.6l-.4-.2-2.3.6.6-2.2-.3-.4A6.7 6.7 0 0 1 12 5Zm-2.6 3.5c-.2 0-.5.1-.7.4-.3.3-.8 1-.8 2.1s.8 2.2.9 2.4c.1.2 1.6 2.7 4.1 3.6 2 .8 2.4.5 2.8.5.4-.1 1.4-.6 1.6-1.2.2-.6.2-1.1.1-1.2l-.6-.3-1.6-.8c-.2-.1-.5-.1-.7.2l-.7.9c-.1.2-.3.2-.6.1a5.4 5.4 0 0 1-2.7-2.3c-.2-.3 0-.5.1-.6l.5-.6c.1-.2.2-.4.1-.6l-.8-1.9c-.2-.5-.4-.5-.7-.5h-.3Z"/></svg></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 帝樂食研所 DELIGHTS FOOD LAB. All rights reserved.</span>
+        <span>採購研發配送全方位服務</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
