@@ -37,7 +37,10 @@ export async function runTask(systemPrompt, userInput) {
         { role: "system", content: systemPrompt },
         { role: "user", content: userInput },
       ],
-      max_tokens: 1024,
+      // 慳錢：reasoning 模型（gpt-5.6 等）reasoning token 好貴，調到最低；
+      // output 亦封頂。之後要更深可以調高。
+      max_tokens: 700,
+      reasoning: { effort: "low" },
     }),
   });
 
