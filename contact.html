@@ -86,8 +86,13 @@
               </div>
             </fieldset>
             <label>查詢詳情<textarea name="message" placeholder="例如：每週用量、希望報價的產品、是否需要試菜或 OEM 研發。"></textarea></label>
-            <div id="successMsg" class="success" role="status">已收到表單內容。正式上線時可接駁 CRM、WhatsApp 或電郵通知。</div>
-            <button class="button dark" type="submit">提交查詢</button>
+            <input type="text" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;">
+            <div id="successMsg" class="success" role="status">多謝查詢！我們已收到你的資料，會盡快回覆。</div>
+            <div id="errorMsg" class="success" role="alert" style="display:none;background:rgba(217,99,50,.12);color:var(--orange-dark);">提交時遇到問題，請直接致電或用 WhatsApp 聯絡我們。</div>
+            <div class="form-actions" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:4px;">
+              <button class="button dark" type="submit">提交查詢</button>
+              <button class="button outline" type="button" id="whatsappBtn">用 WhatsApp 傾</button>
+            </div>
           </form>
         </div>
         <div class="contact-next-grid">
