@@ -37,9 +37,9 @@ export async function runTask(systemPrompt, userInput) {
         { role: "system", content: systemPrompt },
         { role: "user", content: userInput },
       ],
-      // 慳錢：reasoning 模型（gpt-5.6 等）reasoning token 好貴，調到最低；
-      // output 亦封頂。之後要更深可以調高。
-      max_tokens: 700,
+      max_tokens: 1024,
+      // 若之後轉用 reasoning 模型，呢個會限制 reasoning token；
+      // 對非 reasoning 模型（如 deepseek-chat）無害、會被忽略。
       reasoning: { effort: "low" },
     }),
   });
