@@ -1401,6 +1401,43 @@
       display: block;
     }
 
+    .form-consent {
+      margin: 14px 0 0;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--smoke);
+    }
+
+    .form-consent a,
+    .legal-copy a {
+      color: var(--orange-dark);
+      text-decoration: underline;
+    }
+
+    .legal-copy {
+      line-height: 1.85;
+    }
+
+    .legal-copy h3 {
+      margin: 32px 0 8px;
+      font-size: 19px;
+    }
+
+    .legal-copy p {
+      margin: 0 0 14px;
+      color: #33342f;
+    }
+
+    .footer-bottom a {
+      color: rgba(255, 255, 255, .78);
+      text-decoration: underline;
+    }
+
+    .footer-bottom a:hover,
+    .footer-bottom a:focus-visible {
+      color: #fff;
+    }
+
     .site-footer {
       padding: 48px 0;
       color: rgba(255, 255, 255, .6);
