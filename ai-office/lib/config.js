@@ -3,7 +3,7 @@
 
 export const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || "";
 export const OPENROUTER_MODEL =
-  process.env.OPENROUTER_MODEL || "openai/gpt-5.4-nano";
+  process.env.OPENROUTER_MODEL || "deepseek/deepseek-chat";
 export const SUPABASE_URL = process.env.SUPABASE_URL || "";
 export const SUPABASE_KEY = process.env.SUPABASE_KEY || "";
 export const APP_PASSWORD = process.env.APP_PASSWORD || "";
