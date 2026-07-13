@@ -7,7 +7,7 @@ Company website (static, multi-page) + internal inventory system.
 - `food-lab.html` — FOOD LAB (自主研發 / 主廚顧問)
 - `products.html` — 產品方案 (冰鮮禽肉 / 熟製品 / 自主研發獨家品牌 / OEM)
 - `about.html` — 跨境聯動 (about)
-- `process.html` — 培育流程 (supply-chain deep-dive)
+- `process.html` — 產品溯源 (product traceability across ingredients and pre-made products)
 - `quality.html` — 品質冷鏈 (quality)
 - `contact.html` — 聯絡我們 (contact)
 - `style.css`, `main.js` — shared styles and interactions
@@ -22,6 +22,6 @@ Settings → Pages → Build and deployment → Deploy from a branch → `main` 
 
 ## Brand & positioning
 - Company: 帝樂香港有限公司 DELIGHTS HONG KONG LTD. (used in logo, footer, titles)
-- Positioning: 自主研發 (Food Lab) front-and-centre; supply-chain / 溫氏 channel framed as stable backup
+- Positioning: 帝樂自主品牌與 Food Lab front-and-centre; restaurant solutions and supply-chain / 溫氏 channels framed as backup support
 - Type: Noto Sans TC + Plus Jakarta Sans
 - Brand mark: outlined "D" with a leaf (dark mark on light header, white mark on dark footer)
