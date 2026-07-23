@@ -776,6 +776,15 @@
         var(--paper-2);
     }
 
+    .product-brand-logo {
+      display: block;
+      width: 200px;
+      max-width: 62%;
+      height: auto;
+      margin-bottom: 14px;
+      mix-blend-mode: multiply;
+    }
+
     .product-tag {
       display: inline-flex;
       margin-bottom: 28px;
