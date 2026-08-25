@@ -2210,3 +2210,70 @@
   .process-step li { font-size: 16px; }
   .footer-bottom { align-items: flex-start; flex-direction: column; gap: 10px; }
 }
+
+/* End-user readability pass: give touch targets, text and cards room to breathe. */
+body {
+  font-size: 16px;
+}
+
+.container,
+.nav-wrap,
+.ticker {
+  width: min(1180px, calc(100% - 40px));
+}
+
+.button {
+  min-height: 48px;
+  padding: 13px 20px;
+}
+
+.case-card {
+  padding: 32px;
+}
+
+.case-card p,
+.case-card ul,
+.case-card li,
+.home-system-card p,
+.preview-card p {
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.case-card ul {
+  gap: 12px;
+}
+
+.case-card li {
+  padding-left: 24px;
+}
+
+.case-card .button {
+  width: 100%;
+  margin-top: 24px;
+}
+
+@media (max-width: 680px) {
+  .container,
+  .nav-wrap,
+  .ticker,
+  .mobile-nav {
+    width: calc(100% - 40px);
+  }
+
+  h1,
+  .hero-lede,
+  .eyebrow {
+    word-break: normal;
+    overflow-wrap: anywhere;
+    line-break: auto;
+  }
+
+  .case-card {
+    padding: 26px 22px;
+  }
+
+  .case-card .button {
+    margin-top: 26px;
+  }
+}
