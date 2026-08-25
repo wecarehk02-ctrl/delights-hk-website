@@ -2139,3 +2139,74 @@
     min-height: auto;
   }
 }
+
+/* SDD v1.4 corrections: readable support controls, legal links and evidence states. */
+.footer-legal-links {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.footer-legal-links a,
+.contact-details a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+#contactForm > label {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+#contactForm select {
+  appearance: none;
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--ink);
+  font: inherit;
+  min-height: 48px;
+  padding: 12px 14px;
+  width: 100%;
+}
+
+.contact-details small {
+  color: var(--smoke);
+  display: inline-block;
+  font-size: 12px;
+  line-height: 1.6;
+  margin-top: 5px;
+}
+
+.button,
+.tab-button,
+.menu-button,
+.choice,
+.footer-links a,
+.desktop-nav a,
+.mobile-nav a {
+  min-height: 44px;
+}
+
+.button,
+.tab-button,
+.choice,
+.footer-links a,
+.desktop-nav a,
+.mobile-nav a {
+  align-items: center;
+}
+
+@media (max-width: 640px) {
+  body { font-size: 16px; }
+  .hero-lede,
+  .section-heading > p,
+  .contact-copy > p,
+  .legal-copy,
+  .feature-list,
+  .quality-panel,
+  .process-step p,
+  .process-step li { font-size: 16px; }
+  .footer-bottom { align-items: flex-start; flex-direction: column; gap: 10px; }
+}

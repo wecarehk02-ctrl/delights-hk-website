@@ -1,4 +1,54 @@
 
+(function normalizeSiteChrome() {
+  var brand = document.querySelector(".brand-copy");
+  if (brand) {
+    var name = brand.querySelector("strong");
+    var descriptor = brand.querySelector("span");
+    if (name) name.textContent = "DELIGHTS";
+    if (descriptor) descriptor.textContent = "FOOD · PRODUCTS · BUSINESS";
+  }
+
+  document.querySelectorAll(".top-strip").forEach(function (strip) {
+    strip.innerHTML = "<span>DELIGHTS</span><span>Food &amp; Products</span><span>For Business</span>";
+  });
+
+  var current = (window.location.pathname.split("/").pop() || "index.html").toLowerCase();
+  var navItems = [
+    ["index.html", "首頁"],
+    ["products.html", "產品"],
+    ["quality.html", "品質與來源"],
+    ["about.html", "For Business"],
+    ["contact.html", "聯絡"]
+  ];
+  document.querySelectorAll(".desktop-nav, .mobile-nav").forEach(function (nav) {
+    nav.replaceChildren();
+    navItems.forEach(function (item) {
+      var link = document.createElement("a");
+      link.href = item[0];
+      link.textContent = item[1];
+      if (item[0] === current || (current === "food-lab.html" && item[0] === "about.html") || (current === "process.html" && item[0] === "quality.html")) {
+        link.classList.add("active");
+      }
+      nav.appendChild(link);
+    });
+  });
+
+  document.querySelectorAll('.footer-social a[href="#"]').forEach(function (link) { link.remove(); });
+  document.querySelectorAll(".footer-social").forEach(function (group) {
+    if (!group.querySelector("a")) group.hidden = true;
+  });
+
+  document.querySelectorAll(".footer-bottom").forEach(function (footer) {
+    var legal = footer.querySelector(".footer-legal-links");
+    if (!legal) {
+      legal = document.createElement("span");
+      legal.className = "footer-legal-links";
+      legal.innerHTML = '<a href="how-to-enjoy.html">How to Enjoy</a> · <a href="where-to-buy.html">Where to Buy</a> · <a href="privacy.html">私隱政策</a> · <a href="terms.html">商業條款</a> · <a href="product-disclaimer.html">產品與過敏原</a>';
+      footer.appendChild(legal);
+    }
+  });
+})();
+
 const menuButton = document.querySelector(".menu-button");
 const mobileNav = document.getElementById("mobileNav");
 
@@ -79,7 +129,7 @@ var CONTACT_CFG = {
       function (c) { var l = c.closest("label"); return l ? l.textContent.trim() : c.value; }
     );
     return {
-      company: v("company"), name: v("name"), phone: v("phone"),
+      intent: v("intent"), company: v("company"), name: v("name"), phone: v("phone"),
       email: v("email"), interests: interests, message: v("message"),
       botcheck: v("botcheck")
     };
@@ -88,6 +138,7 @@ var CONTACT_CFG = {
   function messageText(d) {
     return [
       "帝樂香港有限公司 — 網站查詢",
+      "查詢目的：" + (d.intent || "—"),
       "公司名稱：" + d.company,
       "聯絡人：" + d.name,
       "電話：" + d.phone,
@@ -129,7 +180,7 @@ var CONTACT_CFG = {
       body: JSON.stringify({
         access_key: CONTACT_CFG.web3formsKey,
         subject: "網站查詢 — " + (d.company || d.name),
-        from_name: d.name, company: d.company, phone: d.phone,
+        from_name: d.name, intent: d.intent, company: d.company, phone: d.phone,
         email: d.email || "(未提供)", interests: d.interests.join("、") || "(未選)",
         message: d.message || "(無)", botcheck: d.botcheck
       })
