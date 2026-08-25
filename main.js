@@ -33,6 +33,18 @@
     });
   });
 
+  document.querySelectorAll(".footer-links ul").forEach(function (list) {
+    list.replaceChildren();
+    navItems.forEach(function (item) {
+      var li = document.createElement("li");
+      var link = document.createElement("a");
+      link.href = item[0];
+      link.textContent = item[1];
+      li.appendChild(link);
+      list.appendChild(li);
+    });
+  });
+
   document.querySelectorAll('.footer-social a[href="#"]').forEach(function (link) { link.remove(); });
   document.querySelectorAll(".footer-social").forEach(function (group) {
     if (!group.querySelector("a")) group.hidden = true;
