@@ -3,13 +3,16 @@
 Company website (static, multi-page) + internal inventory system.
 
 ## Public site (static, GitHub Pages / Vercel)
-- `index.html` — homepage (首頁)
+- `index.html` — consumer-first homepage (首頁)
 - `food-lab.html` — FOOD LAB (自主研發 / 主廚顧問)
-- `products.html` — 產品方案 (冰鮮禽肉 / 熟製品 / 自主研發獨家品牌 / OEM)
-- `about.html` — 跨境聯動 (about)
-- `process.html` — 產品溯源 (product traceability across ingredients and pre-made products)
-- `quality.html` — 品質冷鏈 (quality)
+- `products.html` — consumer products + For Business product systems
+- `about.html` — For Business gateway (Food Lab / OEM / supply / cross-border)
+- `process.html` — For Business product data and traceability detail
+- `quality.html` — 品質與來源 (quality + source preview)
 - `contact.html` — 聯絡我們 (contact)
+- `how-to-enjoy.html` — Support: product-specific usage guidance
+- `where-to-buy.html` — Support: COMING SOON until retail channels are live
+- `terms.html`, `product-disclaimer.html` — legal and product information
 - `style.css`, `main.js` — shared styles and interactions
 - `assets/` — logos and imagery (`delights-mark-dark-web.png` = header mark, `delights-mark-white-web.png` = footer mark)
 - `vercel.json` — clean URLs + `database.delights.hk` → `/inventory/` redirect

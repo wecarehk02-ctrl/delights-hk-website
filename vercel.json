@@ -7,6 +7,51 @@
       "has": [{ "type": "host", "value": "database.delights.hk" }],
       "destination": "/inventory/",
       "permanent": false
+    },
+    {
+      "source": "/business/food-lab/",
+      "destination": "/food-lab.html",
+      "permanent": false
+    },
+    {
+      "source": "/business/products/",
+      "destination": "/products.html",
+      "permanent": false
+    },
+    {
+      "source": "/business/oem/",
+      "destination": "/products.html",
+      "permanent": false
+    },
+    {
+      "source": "/business/supply/",
+      "destination": "/about.html",
+      "permanent": false
+    },
+    {
+      "source": "/business/traceability/",
+      "destination": "/process.html",
+      "permanent": false
+    },
+    {
+      "source": "/quality/",
+      "destination": "/quality.html",
+      "permanent": false
+    },
+    {
+      "source": "/products/qingyuan/",
+      "destination": "/products.html",
+      "permanent": false
+    },
+    {
+      "source": "/products/baiyu/",
+      "destination": "/products.html",
+      "permanent": false
+    },
+    {
+      "source": "/support/where-to-buy/",
+      "destination": "/where-to-buy.html",
+      "permanent": false
     }
   ]
 }
