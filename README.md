@@ -11,7 +11,7 @@ Company website (static, multi-page) + internal inventory system.
 - `quality.html` — 品質與來源 (quality + source preview)
 - `contact.html` — 聯絡我們 (contact)
 - `how-to-enjoy.html` — Support: product-specific usage guidance
-- `where-to-buy.html` — Support: COMING SOON until retail channels are live
+- `where-to-buy.html` — customer-facing purchase-arrangement enquiry page
 - `terms.html`, `product-disclaimer.html` — legal and product information
 - `style.css`, `main.js` — shared styles and interactions
 - `assets/` — logos and imagery (`delights-mark-dark-web.png` = header mark, `delights-mark-white-web.png` = footer mark)

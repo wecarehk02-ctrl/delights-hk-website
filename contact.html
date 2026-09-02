@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>聯絡 DELIGHTS｜產品查詢及商業合作</title>
   <meta name="description" content="聯絡 DELIGHTS：清遠御品、白玉浸雞產品查詢，以及 Food Lab、OEM 與餐飲合作。">
+  <link rel="canonical" href="https://delights.hk/contact.html">
+  <meta property="og:locale" content="zh_HK">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="聯絡 DELIGHTS｜產品查詢及商業合作">
+  <meta property="og:description" content="查詢清遠御品、白玉浸雞，以及 Food Lab、OEM 與餐飲合作。">
+  <meta property="og:url" content="https://delights.hk/contact.html">
+  <meta property="og:image" content="https://delights.hk/assets/delights-photo-set/kitchen-team-reference.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" href="assets/delights-mark-dark-web.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
@@ -16,26 +25,24 @@
 
   <header class="site-header">
     <div class="top-strip">
-      <span>Hong Kong Food Lab</span>
-      <span>Product R&amp;D &amp; OEM</span>
-      <span>Stable Channel Backup</span>
+      <span>DELIGHTS</span>
+      <span>Food &amp; Products</span>
+      <span>For Business</span>
     </div>
     <div class="nav-wrap">
       <a class="brand" href="index.html" aria-label="返回首頁">
         <span class="brand-mark"><img src="assets/delights-mark-dark-web.png" alt="帝樂香港有限公司 Logo"></span>
         <span class="brand-copy">
-          <strong>帝樂香港有限公司</strong>
-          <span>DELIGHTS HONG KONG LTD.</span>
+          <strong>DELIGHTS</strong>
+          <span>FOOD · PRODUCTS · BUSINESS</span>
         </span>
       </a>
       <nav class="desktop-nav" aria-label="主要導覽">
         <a href="index.html">首頁</a>
-        <a href="food-lab.html">FOOD LAB</a>
-        <a href="products.html">產品方案</a>
-        <a href="about.html">跨境聯動</a>
-        <a href="process.html">產品溯源</a>
-        <a href="quality.html">品質冷鏈</a>
-        <a href="contact.html" class="active">聯絡我們</a>
+        <a href="products.html">產品</a>
+        <a href="quality.html">品質與來源</a>
+        <a href="about.html">For Business</a>
+        <a href="contact.html" class="active" aria-current="page">聯絡</a>
       </nav>
       <button class="menu-button" type="button" aria-label="開啟選單" aria-expanded="false" aria-controls="mobileNav">
         <span></span>
@@ -45,12 +52,10 @@
     </div>
     <nav id="mobileNav" class="mobile-nav" aria-label="流動導覽">
       <a href="index.html">首頁</a>
-      <a href="food-lab.html">FOOD LAB</a>
-      <a href="products.html">產品方案</a>
-      <a href="about.html">跨境聯動</a>
-      <a href="process.html">產品溯源</a>
-      <a href="quality.html">品質冷鏈</a>
-      <a href="contact.html" class="active">聯絡我們</a>
+      <a href="products.html">產品</a>
+      <a href="quality.html">品質與來源</a>
+      <a href="about.html">For Business</a>
+      <a href="contact.html" class="active" aria-current="page">聯絡</a>
     </nav>
   </header>
 
@@ -60,9 +65,9 @@
         <div class="contact-shell reveal">
           <div class="contact-copy">
             <p class="eyebrow">Contact DELIGHTS</p>
-            <h2>聯絡我們</h2>
-            <p>先選擇查詢目的，再留下產品、公司與聯絡資料；我們會按查詢內容回覆可提供的資料。</p>
-            <p>Where to Buy 尚未上架前只作購買安排查詢，不顯示未確認的零售商、價格或購買按鈕。</p>
+            <h1><span class="semantic-line">聯絡 DELIGHTS，</span><span class="semantic-line">查詢產品或合作。</span></h1>
+            <p>先選擇查詢目的，再留下產品及聯絡資料；商業合作可提供公司資料，方便我們按需要回覆。</p>
+            <p>如欲了解購買安排，請提供<span class="keep-together">產品名稱</span>及<span class="keep-together">所在地區</span>，我們會按現有供應資料回覆。</p>
             <div class="contact-details">
               <div><strong>公司電話</strong><a href="tel:+85296844836">+852 9684 4836</a></div>
               <div><strong>電郵</strong><a href="mailto:info@delights.hk">info@delights.hk</a></div>
@@ -74,14 +79,14 @@
               <select name="intent" required>
                 <option value="">請選擇</option>
                 <option value="general-product">一般產品查詢</option>
-                <option value="purchase">購買安排（未上架前只作查詢）</option>
+                <option value="purchase">購買安排</option>
                 <option value="foodservice">餐飲採購／報價</option>
                 <option value="food-lab-oem">Food Lab／OEM</option>
                 <option value="product-info">產品資料／合作洽談</option>
               </select>
             </label>
             <div class="form-grid">
-              <label>公司名稱 *<input type="text" name="company" autocomplete="organization" required></label>
+              <label>公司名稱 <span class="field-note">（一般產品查詢可留空）</span><span id="companyRequired" aria-hidden="true" hidden> *</span><input type="text" name="company" autocomplete="organization" aria-required="false"></label>
               <label>聯絡人姓名 *<input type="text" name="name" autocomplete="name" required></label>
               <label>聯絡電話 *<input type="tel" name="phone" autocomplete="tel" required></label>
               <label>電郵地址<input type="email" name="email" autocomplete="email"></label>
@@ -97,13 +102,12 @@
             </fieldset>
             <label>查詢詳情<textarea name="message" placeholder="例如：每週用量、希望報價的產品、產品資料或 OEM 合作方向。"></textarea></label>
             <input type="text" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;">
-            <div id="successMsg" class="success" role="status">多謝查詢！我們已收到你的資料，會盡快回覆。</div>
-            <div id="errorMsg" class="success" role="alert" style="display:none;background:rgba(217,99,50,.12);color:var(--orange-dark);">提交時遇到問題，請直接致電或用 WhatsApp 聯絡我們。</div>
+            <div id="successMsg" class="success" role="status">已為你準備電郵草稿；請在電郵程式確認內容後按「傳送」，查詢先會正式送出。</div>
             <div class="form-actions" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:4px;">
-              <button class="button dark" type="submit">提交查詢</button>
+              <button class="button dark" type="submit">以電郵發送查詢</button>
               <button class="button outline" type="button" id="whatsappBtn">用 WhatsApp 傾</button>
             </div>
-            <p class="form-consent">提交即表示你同意我們按<a href="privacy.html">私隱政策</a>處理你提供的資料。</p>
+            <p class="form-consent">按下電郵按鈕會在你的裝置開啟草稿；你仍需自行按「傳送」。經電郵或 WhatsApp 傳送資料前，請參閱<a href="privacy.html">私隱政策</a>。</p>
           </form>
         </div>
         <div class="content-split contact-support reveal">
@@ -118,7 +122,6 @@
           </div>
           <figure class="image-slot">
             <img src="assets/delights-photo-set/kitchen-team-reference.jpg" alt="Food Lab 與產品洽談">
-            <figcaption>Food Lab 產品交流與廚房工作示意。</figcaption>
           </figure>
         </div>
       </div>
@@ -142,12 +145,10 @@
           <h4>快速連結</h4>
           <ul>
             <li><a href="index.html">首頁</a></li>
-            <li><a href="food-lab.html">FOOD LAB</a></li>
-            <li><a href="products.html">產品方案</a></li>
-            <li><a href="about.html">跨境聯動</a></li>
-            <li><a href="process.html">產品溯源</a></li>
-            <li><a href="quality.html">品質冷鏈</a></li>
-            <li><a href="contact.html">聯絡我們</a></li>
+            <li><a href="products.html">產品</a></li>
+            <li><a href="quality.html">品質與來源</a></li>
+            <li><a href="about.html">For Business</a></li>
+            <li><a href="contact.html">聯絡</a></li>
           </ul>
         </div>
         <div class="footer-contact">
@@ -169,8 +170,8 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <span>© 2026 帝樂香港有限公司 DELIGHTS HONG KONG LTD. All rights reserved. · <a href="privacy.html">私隱政策</a></span>
-        <span>自主研發 · 冰鮮禽肉 · 熟食燒臘 · OEM</span>
+        <span>© 2026 帝樂香港有限公司 DELIGHTS HONG KONG LTD. All rights reserved.</span>
+        <span class="footer-legal-links"><a href="how-to-enjoy.html">食用與保存</a> · <a href="privacy.html">私隱政策</a> · <a href="terms.html">商業條款</a> · <a href="product-disclaimer.html">產品與過敏原</a></span>
       </div>
     </div>
   </footer>

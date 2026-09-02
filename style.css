@@ -495,7 +495,7 @@
       font-weight: 900;
     }
 
-    .value-card h3 {
+    .value-card h2 {
       margin-bottom: 12px;
       font-size: 24px;
       line-height: 1.16;
@@ -618,7 +618,7 @@
       text-transform: uppercase;
     }
 
-    .process-step h3 {
+    .process-step h2 {
       margin-bottom: 12px;
       color: #fff;
       font-size: 29px;
@@ -853,7 +853,7 @@
       padding: 38px;
     }
 
-    .product-showcase-copy h3 {
+    .product-showcase-copy h2 {
       margin-bottom: 16px;
       font-size: clamp(28px, 3vw, 42px);
       line-height: 1.08;
@@ -1099,7 +1099,7 @@
       letter-spacing: .08em;
     }
 
-    .info-card h3,
+    .info-card h2,
     .contact-next-card h3 {
       margin: 0 0 10px;
       font-size: 23px;
@@ -1722,14 +1722,13 @@
     }
 
     .reveal {
-      opacity: 0;
-      transform: translateY(22px);
-      transition: opacity 620ms var(--ease), transform 620ms var(--ease);
+      opacity: 1;
+      transform: none;
     }
 
     .reveal.visible {
       opacity: 1;
-      transform: translateY(0);
+      transform: none;
     }
 
     @keyframes fadeUp {
@@ -2282,5 +2281,206 @@ body {
 
   .case-card .button {
     margin-top: 26px;
+  }
+}
+
+/* Keep supporting copy readable and rows visually aligned. */
+.desktop-nav a,
+.mobile-nav a,
+.button,
+.tab-button,
+#contactForm label,
+.choice {
+  font-size: 16px;
+}
+
+.eyebrow,
+.product-tag,
+.case-kicker,
+.value-no,
+.nurture-card > span,
+.home-system-card > span {
+  font-size: 14px;
+}
+
+.metric span,
+.product-card p,
+.product-card ul,
+.timeline-item p,
+.source-note,
+.checkpoint-grid span,
+.nurture-card p,
+.form-consent,
+.footer-links a,
+.footer-contact li,
+.footer-social p {
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.footer-bottom {
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.home-card-grid,
+.value-grid,
+.preview-grid,
+.nurture-rail,
+.case-grid,
+.quality-grid,
+.checkpoint-grid {
+  align-items: stretch;
+}
+
+.home-system-card,
+.value-card,
+.preview-card,
+.nurture-card,
+.case-card,
+.quality-panel,
+.checkpoint-grid article {
+  height: 100%;
+}
+
+/* Published-site typography: preserve Chinese meaning, rhythm and alignment. */
+html {
+  line-break: strict;
+}
+
+body {
+  overflow-wrap: break-word;
+}
+
+h1,
+h2,
+h3,
+.eyebrow,
+.button,
+.tab-button,
+.desktop-nav a,
+.mobile-nav a {
+  word-break: normal;
+  overflow-wrap: normal;
+  text-wrap: balance;
+}
+
+p,
+li,
+.legal-copy,
+.section-heading > p {
+  text-wrap: pretty;
+}
+
+.semantic-line,
+.keep-together {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.button,
+.tab-button,
+.desktop-nav a,
+.mobile-nav a,
+.top-strip span {
+  white-space: nowrap;
+}
+
+.section-heading h1 {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(32px, 4.4vw, 58px);
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 1.08;
+  text-shadow: none;
+}
+
+.section-heading h1 .semantic-line,
+.section-heading h2 .semantic-line {
+  max-width: 100%;
+}
+
+.contact-copy h1 {
+  font-size: clamp(32px, 10vw, 52px);
+  line-height: 1.08;
+}
+
+.legal-copy h2 {
+  margin: 32px 0 8px;
+  color: var(--ink);
+  font-size: 20px;
+  line-height: 1.4;
+}
+
+.visual-note,
+.contact-details small,
+.field-note {
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.field-note {
+  color: var(--smoke);
+  font-weight: 500;
+}
+
+.contact-shell,
+.content-split,
+.home-cta-band,
+.section-heading {
+  align-items: center;
+}
+
+.form-actions {
+  align-items: stretch;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid rgba(217, 99, 50, .55);
+  outline-offset: 3px;
+}
+
+@media (max-width: 640px) {
+  .section-heading h1 {
+    font-size: clamp(32px, 10vw, 42px);
+    line-height: 1.12;
+  }
+
+  .section-heading,
+  .contact-shell,
+  .content-split,
+  .home-cta-band {
+    align-items: start;
+  }
+
+  .form-actions .button {
+    width: 100%;
+  }
+
+  .brand-copy > span {
+    display: none;
+  }
+
+  .visual-note,
+  .contact-details small,
+  .field-note {
+    font-size: 16px;
+  }
+
+  .tab-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    overflow: visible;
+  }
+
+  .tab-button {
+    width: 100%;
+    min-width: 0;
   }
 }
