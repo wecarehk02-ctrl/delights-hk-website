@@ -1,66 +1,4 @@
 
-(function normalizeSiteChrome() {
-  var brand = document.querySelector(".brand-copy");
-  if (brand) {
-    var name = brand.querySelector("strong");
-    var descriptor = brand.querySelector("span");
-    if (name) name.textContent = "DELIGHTS";
-    if (descriptor) descriptor.textContent = "FOOD · PRODUCTS · BUSINESS";
-  }
-
-  document.querySelectorAll(".top-strip").forEach(function (strip) {
-    strip.innerHTML = "<span>DELIGHTS</span><span>Food &amp; Products</span><span>For Business</span>";
-  });
-
-  var current = (window.location.pathname.split("/").pop() || "index.html").toLowerCase();
-  var navItems = [
-    ["index.html", "首頁"],
-    ["products.html", "產品"],
-    ["quality.html", "品質與來源"],
-    ["about.html", "For Business"],
-    ["contact.html", "聯絡"]
-  ];
-  document.querySelectorAll(".desktop-nav, .mobile-nav").forEach(function (nav) {
-    nav.replaceChildren();
-    navItems.forEach(function (item) {
-      var link = document.createElement("a");
-      link.href = item[0];
-      link.textContent = item[1];
-      if (item[0] === current || (current === "food-lab.html" && item[0] === "about.html") || (current === "process.html" && item[0] === "quality.html")) {
-        link.classList.add("active");
-      }
-      nav.appendChild(link);
-    });
-  });
-
-  document.querySelectorAll(".footer-links ul").forEach(function (list) {
-    list.replaceChildren();
-    navItems.forEach(function (item) {
-      var li = document.createElement("li");
-      var link = document.createElement("a");
-      link.href = item[0];
-      link.textContent = item[1];
-      li.appendChild(link);
-      list.appendChild(li);
-    });
-  });
-
-  document.querySelectorAll('.footer-social a[href="#"]').forEach(function (link) { link.remove(); });
-  document.querySelectorAll(".footer-social").forEach(function (group) {
-    if (!group.querySelector("a")) group.hidden = true;
-  });
-
-  document.querySelectorAll(".footer-bottom").forEach(function (footer) {
-    var legal = footer.querySelector(".footer-legal-links");
-    if (!legal) {
-      legal = document.createElement("span");
-      legal.className = "footer-legal-links";
-      legal.innerHTML = '<a href="how-to-enjoy.html">How to Enjoy</a> · <a href="where-to-buy.html">Where to Buy</a> · <a href="privacy.html">私隱政策</a> · <a href="terms.html">商業條款</a> · <a href="product-disclaimer.html">產品與過敏原</a>';
-      footer.appendChild(legal);
-    }
-  });
-})();
-
 const menuButton = document.querySelector(".menu-button");
 const mobileNav = document.getElementById("mobileNav");
 
@@ -81,17 +19,41 @@ if (menuButton && mobileNav) {
 const tabButtons = Array.from(document.querySelectorAll(".tab-button"));
 const panels = Array.from(document.querySelectorAll(".tab-panel"));
 
-tabButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    tabButtons.forEach((item) => item.setAttribute("aria-selected", "false"));
-    panels.forEach((panel) => panel.classList.remove("active"));
+function activateTab(button, shouldScroll) {
+  tabButtons.forEach((item) => item.setAttribute("aria-selected", "false"));
+  panels.forEach((panel) => panel.classList.remove("active"));
+  button.setAttribute("aria-selected", "true");
+  if (shouldScroll) button.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+  const panel = document.getElementById(button.getAttribute("aria-controls"));
+  if (panel) panel.classList.add("active");
+}
 
-    button.setAttribute("aria-selected", "true");
-    button.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
-    const panel = document.getElementById(button.getAttribute("aria-controls"));
-    if (panel) panel.classList.add("active");
+tabButtons.forEach((button) => {
+  button.addEventListener("click", () => activateTab(button, true));
+});
+
+tabButtons.forEach((button, index) => {
+  button.addEventListener("keydown", (event) => {
+    if (!["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"].includes(event.key)) return;
+    event.preventDefault();
+    var nextIndex = index;
+    if (event.key === "Home") nextIndex = 0;
+    if (event.key === "End") nextIndex = tabButtons.length - 1;
+    if (event.key === "ArrowRight" || event.key === "ArrowDown") nextIndex = (index + 1) % tabButtons.length;
+    if (event.key === "ArrowLeft" || event.key === "ArrowUp") nextIndex = (index - 1 + tabButtons.length) % tabButtons.length;
+    tabButtons[nextIndex].focus();
+    tabButtons[nextIndex].click();
   });
 });
+
+var hashTabs = {
+  "#qingyuan": "tab-poultry",
+  "#baiyu": "tab-sauce",
+  "#food-lab": "tab-kitchen",
+  "#oem": "tab-brand"
+};
+var requestedTab = document.getElementById(hashTabs[window.location.hash.toLowerCase()]);
+if (requestedTab) activateTab(requestedTab, false);
 
 if ("IntersectionObserver" in window) {
   const revealObserver = new IntersectionObserver((entries) => {
@@ -108,20 +70,11 @@ if ("IntersectionObserver" in window) {
   document.querySelectorAll(".reveal").forEach((node) => node.classList.add("visible"));
 }
 
-/* ── Contact form ─────────────────────────────────────────────────────────
- * Submits an enquiry through up to 3 channels:
- *   1. Web3Forms  → emails info@delights.hk        (set web3formsKey)
- *   3. Supabase   → inserts into public.contact_leads (set supabaseUrl + anonKey)
- *   + WhatsApp button → opens a pre-filled chat to the company number
- * Fill in the CONTACT_CFG values below to activate email + database delivery.
- * Anon key is safe to expose publicly IF Supabase RLS only allows anon INSERT
- * on contact_leads (see supabase/contact-leads.sql). Inventory stays auth-only.
- * If neither email nor database is configured yet, submit falls back to mailto.
+/* The public enquiry form prepares an email draft or a WhatsApp message.
+ * It does not claim that DELIGHTS has received anything until the visitor
+ * sends the message in their chosen app.
  */
 var CONTACT_CFG = {
-  web3formsKey: "",       // Web3Forms access key → email to info@delights.hk
-  supabaseUrl: "",        // e.g. https://xxxx.supabase.co
-  supabaseAnonKey: "",    // Supabase anon (public) key
   whatsapp: "85296844836",
   email: "info@delights.hk"
 };
@@ -130,8 +83,10 @@ var CONTACT_CFG = {
   var contactForm = document.getElementById("contactForm");
   if (!contactForm) return;
   var successMsg = document.getElementById("successMsg");
-  var errorMsg = document.getElementById("errorMsg");
   var whatsappBtn = document.getElementById("whatsappBtn");
+  var intentSelect = contactForm.elements.intent;
+  var companyInput = contactForm.elements.company;
+  var companyRequired = document.getElementById("companyRequired");
 
   function gather() {
     var el = contactForm.elements;
@@ -151,7 +106,7 @@ var CONTACT_CFG = {
     return [
       "帝樂香港有限公司 — 網站查詢",
       "查詢目的：" + (d.intent || "—"),
-      "公司名稱：" + d.company,
+      "公司名稱：" + (d.company || "—"),
       "聯絡人：" + d.name,
       "電話：" + d.phone,
       "電郵：" + (d.email || "—"),
@@ -162,41 +117,7 @@ var CONTACT_CFG = {
 
   function show(node) {
     if (successMsg) successMsg.style.display = "none";
-    if (errorMsg) errorMsg.style.display = "none";
     if (node) { node.style.display = "block"; node.classList.add("visible"); }
-  }
-
-  function sendSupabase(d) {
-    if (!CONTACT_CFG.supabaseUrl || !CONTACT_CFG.supabaseAnonKey) return null;
-    return fetch(CONTACT_CFG.supabaseUrl.replace(/\/$/, "") + "/rest/v1/contact_leads", {
-      method: "POST",
-      headers: {
-        "apikey": CONTACT_CFG.supabaseAnonKey,
-        "Authorization": "Bearer " + CONTACT_CFG.supabaseAnonKey,
-        "Content-Type": "application/json",
-        "Prefer": "return=minimal"
-      },
-      body: JSON.stringify({
-        company: d.company, contact_name: d.name, phone: d.phone,
-        email: d.email || null, interests: d.interests, message: d.message || null,
-        source: "website"
-      })
-    }).then(function (r) { if (!r.ok) throw new Error("supabase " + r.status); });
-  }
-
-  function sendWeb3Forms(d) {
-    if (!CONTACT_CFG.web3formsKey) return null;
-    return fetch("https://api.web3forms.com/submit", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "Accept": "application/json" },
-      body: JSON.stringify({
-        access_key: CONTACT_CFG.web3formsKey,
-        subject: "網站查詢 — " + (d.company || d.name),
-        from_name: d.name, intent: d.intent, company: d.company, phone: d.phone,
-        email: d.email || "(未提供)", interests: d.interests.join("、") || "(未選)",
-        message: d.message || "(無)", botcheck: d.botcheck
-      })
-    }).then(function (r) { if (!r.ok) throw new Error("web3forms " + r.status); });
   }
 
   function mailtoFallback(d) {
@@ -205,22 +126,31 @@ var CONTACT_CFG = {
       "&body=" + encodeURIComponent(messageText(d));
   }
 
+  function updateCompanyRequirement() {
+    if (!intentSelect || !companyInput) return;
+    var businessIntents = ["foodservice", "food-lab-oem", "product-info"];
+    var isRequired = businessIntents.includes(intentSelect.value);
+    companyInput.required = isRequired;
+    companyInput.setAttribute("aria-required", String(isRequired));
+    if (companyRequired) companyRequired.hidden = !isRequired;
+  }
+
+  if (intentSelect) {
+    intentSelect.addEventListener("change", updateCompanyRequirement);
+    updateCompanyRequirement();
+  }
+
   contactForm.addEventListener("submit", function (event) {
     event.preventDefault();
     var d = gather();
     if (d.botcheck) return;                 // honeypot: silently drop bots
-    var jobs = [sendSupabase(d), sendWeb3Forms(d)].filter(Boolean);
     var btn = contactForm.querySelector('button[type="submit"]');
-    if (btn) { btn.disabled = true; btn.textContent = "提交中…"; }
-    var done = function () { if (btn) { btn.disabled = false; btn.textContent = "提交查詢"; } };
-
-    if (!jobs.length) { mailtoFallback(d); show(successMsg); contactForm.reset(); done(); return; }
-
-    Promise.all(jobs).then(function () {
-      show(successMsg); contactForm.reset(); done();
-    }).catch(function () {
-      show(errorMsg); done();
-    });
+    if (btn) { btn.disabled = true; btn.textContent = "正在開啟電郵…"; }
+    show(successMsg);
+    mailtoFallback(d);
+    window.setTimeout(function () {
+      if (btn) { btn.disabled = false; btn.textContent = "以電郵發送查詢"; }
+    }, 900);
   });
 
   if (whatsappBtn) {
